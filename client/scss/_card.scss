@@ -1,0 +1,75 @@
+@import "colors";
+@import "card-mixin";
+
+.card-container{
+    position: relative;
+    float: left;
+    margin: 0;
+    margin-top: 3%;
+    margin-left: 5%;
+}
+
+card-two-sided{
+    
+    display: block;
+    position: relative;
+
+    /*Handles the "FlippIng Of the Card*/
+    > card-front{
+        @include card-defaults();
+        -webkit-transform:  perspective(800px) rotateY(0); 
+        transform:  perspective(800px) rotateY(0); 
+
+        .card-head{
+            display: inline-block;
+            border-bottom: solid;
+            border-color: $main-orange;
+            width: 100%;
+
+            .name{
+                float: left;
+                margin-bottom:0;
+            }
+
+            .points{
+                float: right;
+                margin-bottom:0;
+            }
+        }
+    }
+
+    > card-back{
+        @include card-defaults();
+
+        position:absolute;
+        -webkit-transform:  perspective(800px) rotateY(180deg); 
+        transform:  perspective(800px) rotateY(180deg);
+    }
+}
+
+/* Front visible */
+card-two-sided.card-front{
+
+    > card-front {
+          -webkit-transform:  perspective(800px) rotateY(0); 
+          transform:  perspective(800px) rotateY(0);  
+    }
+    
+    > card-back {
+     -webkit-transform:  perspective(800px) rotateY(180deg); 
+     transform:  perspective(800px) rotateY(180deg);   
+    }
+}
+
+/* Back visible */
+card-two-sided.card-back{ 
+    > card-front {
+      -webkit-transform:  perspective(800px) rotateY(-180deg); 
+      transform:  perspective(800px) rotateY(-180deg);  
+    }
+
+    > card-back {
+     -webkit-transform:  perspective(800px) rotateY(0); 
+     transform:  perspective(800px) rotateY(0);   
+    }
+}

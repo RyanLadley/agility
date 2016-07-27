@@ -1,0 +1,17 @@
+<div class = 'card-container' ng-mouseover = "front = false" ng-mouseleave = "front = true">
+    <card-two-sided class = "card-two-sided {{front ? 'card-front' : 'card-back'}}">
+
+        <card-front>
+            <div class = "card-head">
+                <h3 class = "name"> {{card.name}}</h3>
+                <p class = "points"> Points: {{card.points}}</p>
+            </div>
+            <p class = "description">{{card.description}}</p>
+        </card-front>
+
+        <card-back>
+            <h1>Wow!</h1>
+        </card-back>
+        
+    </card-two-sided>
+</div>
