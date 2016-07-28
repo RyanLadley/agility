@@ -6,11 +6,11 @@
 
         <!--<JQeury Script -->
         <script src = "/res/lib/jquery/jquery-2.2.4.js"></script> 
-        
+ 
         <!--Bootstrap Scripts-->
         <script src = "/res/lib/bootstrap/js/bootstrap.min.js"></script>
         <link rel = "stylesheet" href = "/res/lib/bootstrap/css/bootstrap.min.css"> 
- 
+
         <!--Angular Scripts-->
         <script src = "/res/lib/angular/angular.min.js"></script>
         <script src = "/res/lib/angular/angular-resource.min.js"></script>
@@ -24,18 +24,14 @@
     </head>
     <body>
 
-        <div class = "header">
-            <div class = "tittle">    
-                <h1>Tittle</h1>
-            </div>
-            <div class = navbar>
-                <h2 class = "current-page"> Current Page </h2>
-            </div>
-        </div>
+        <sidebar></sidebar>
 
+        <div class = "content">
 
-        <div class = "row container">
-            <div ng-controller = "sprintController">
+            <div class = "sprint" ng-controller = "sprintController">
+                <div class = "section-title">
+                    <h1 class = "test">User Stories</h1>
+                </div>
                 <div ng-repeat = 'card in cards'>
                     <card card = 'card' ></card>
                 </div>

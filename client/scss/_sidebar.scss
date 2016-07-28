@@ -1,0 +1,43 @@
+@import "colors";
+@import "mixin";
+
+$sidebar-width: 50px;
+$side-minu-width: 100px;
+
+.sidebar-container{
+    bottom: 0;
+    top: 0;
+    margin-right: 100px;
+    height: 100%;
+    -webkit-transition: linear 0.5s;
+    transition: linear 0.5s;
+    overflow: hidden;
+    position: fixed;
+    width: $sidebar-width;
+    z-index: 1000;
+
+
+    .side-menu{
+        background-color: $side-menu-grey;
+        height: 100%;   
+        float: right;
+        position: relative;
+        min-width: $side-minu-width;
+        /*Exists off screen*/
+        position:absolute;
+        left: -100;
+    }
+
+    .sidebar{
+        background-color: $nav-black;
+        height: 100%;
+        float: right;
+        position: relative;
+        width: $sidebar-width;
+    }    
+
+}
+
+.content{
+    postion: relative;
+}

@@ -10,6 +10,29 @@ var app = angular.module('app', ['ngRoute', 'ngCookies']);;app.service('toggleSe
     }
 
 }]);
+app.controller('sidebarController', ['$scope', function($scope){
+  
+    $scope.abs
+
+    $scope.expand = function(){
+        $scope.pos = {
+            "width": "150px"
+        };
+        $scope.abs = {
+            "left": "0"
+        };
+    }
+
+    $scope.compress = function(){
+        $scope.pos= {
+            "width": "50"
+        };
+        $scope.abs = {
+            "left": "-150"
+        }
+    }
+
+}]);
 app.controller('sprintController', ['$scope', function($scope){
   
     $scope.cards = [
@@ -34,3 +57,13 @@ app.controller('sprintController', ['$scope', function($scope){
        templateUrl: '/res/components/directives/card/card.template.html'
     };
 }])
+app.directive('sidebar', function() {
+    return{
+        restrict: 'E',
+        controller: 'sidebarController',
+        scope: {
+            card: '='
+        },
+       templateUrl: '/res/components/directives/sidebar/sidebar.template.html'
+    };
+})

@@ -6,6 +6,29 @@ app.controller('cardController', ['$scope', function($scope){
     }
 
 }]);
+app.controller('sidebarController', ['$scope', function($scope){
+  
+    $scope.abs
+
+    $scope.expand = function(){
+        $scope.pos = {
+            "width": "150px"
+        };
+        $scope.abs = {
+            "left": "0"
+        };
+    }
+
+    $scope.compress = function(){
+        $scope.pos= {
+            "width": "50"
+        };
+        $scope.abs = {
+            "left": "-150"
+        }
+    }
+
+}]);
 app.controller('sprintController', ['$scope', function($scope){
   
     $scope.cards = [

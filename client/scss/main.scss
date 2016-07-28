@@ -1,8 +1,10 @@
-@import "header";
+@import "sidebar";
 @import "card";
+@import "sprint";
 
 
 body{
+    overflow-x: auto;
 	margin: 0;
 	padding: 0;
 }
