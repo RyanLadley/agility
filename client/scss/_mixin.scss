@@ -11,3 +11,12 @@
 @mixin text-outline($color){
 	text-shadow: -1px 0 $color,0 1px $color,1px 0 $color,0 -1px $color;
 }
+
+@mixin epic-label(){
+    margin: 0;
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding-left: 6px;
+    padding-right: 6px;
+}

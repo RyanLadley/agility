@@ -1,0 +1,21 @@
+<div class = left-container> 
+    <div class = "sprint-discussion">
+        <h1 class = "sprint-discussion-header">Sprint Discussion</h1>
+        <discussion-board discussion = "discussion"></discussion-board>
+    </div>
+</div>
+
+<div class = "right-container"> 
+    <div class = "project-info">
+        <project-image></project-image>
+    </div>
+    <div class = "cards-assigned">
+        <h1 class = "assigned-header" > Cards Assigned </h1>
+        <div class = "repeat-cards" ng-repeat = 'card in cards'>
+            <card class = "right" card = 'card' ></card>
+        </div>
+    </div>
+    
+</div>
+
+

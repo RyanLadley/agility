@@ -1,0 +1,94 @@
+@import "mixin";
+
+.details-page{
+    margin-top: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+    min-width: 1200px;
+
+    .section-label{
+        width: 100%;
+        border-bottom: 1px solid $section-divide-color;
+    }
+}
+
+.details-header{
+    width: 100%;
+    display:inline-block;
+    
+    h1{
+        float:left;
+        margin-right: 20px;
+        margin-bottom: 0;
+    }
+}
+
+.details-body{
+    height: 400px;
+    postion: relative;
+
+    .details-left{
+        display: inline-block;
+        vertical-align:top;
+        height:100%;
+        margin: 10px 0 0 0 ;
+        min-width: 400px;
+        width: 70%;
+        padding-right: 50px;
+        border-right: 1px solid $section-divide-color;
+
+        .card-description{
+            max-height: 95%;
+        }
+    }
+
+    .details-right{
+        position:relative;
+        display: inline-block;
+        vertical-align:top;
+        width: 20%;
+        min-width: 200px;
+
+        padding-left: 20px;
+        margin: 10px 0 0 0 ;
+
+        .card-epic{
+            @include epic-label();
+        }
+
+        .label-value{
+            margin: 0 0 10px 0;
+
+            label{
+                margin-right: 3px;
+                font-weight: bold;
+            }
+
+            p{
+                margin:0;
+                display: inline-block;
+            }
+        }
+    }
+
+}
+
+.standard-header{
+    border-bottom: solid $main-orange;
+}
+
+.details-foot{
+    table{
+        border: 1px solid $section-divide-color;
+    }
+
+    tr:nth-child(even) {
+        background-color: #F7F7F7;
+    }
+
+    .table-header{
+        text-align: left;
+        background-color: #C6C6C6;
+    }
+}
+

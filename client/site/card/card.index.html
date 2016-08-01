@@ -1,0 +1,58 @@
+<div class = "details-page">
+    <div class = "details-header standard-header">
+        <h1 class = "card-name">{{card.id}}</h1>
+        <h1 class = "card-id">{{card.name}}</h1>
+    </div>
+
+    <div class = "details-body">
+        <div class = "details-left">
+            <h2 class = "description-label section-label">Description</h1>
+            <p class = "card-description"> {{card.description}}</p>
+        </div>
+
+        <div class = "details-right">
+            <h3 class = "details-label section-label"> Details</h3>
+            <div class = "label-value">
+                <label> Assigned Epic: </label>
+                <p class = "card-epic" style = "color: {{card.epic.foreColor}}; background-color: {{card.epic.backColor}};">{{card.epic.name}}</p>
+            </div>
+
+            <div class = "label-value">
+                <label>Created: </label>
+                <p class = "card-created">{{card.created | date }}</p>
+            </div>
+            
+            <div class = "label-value">
+                <label>Updated:</label>
+                <p class = "card-modified">{{card.modified | date }}</p>
+            </div>
+            
+            <div class = "label-value">
+                <label>Points:</label>
+                <p class = "card-points">{{card.points}}</p>
+            </div>
+
+            <div class = "label-value">
+                <label> Point of Contact: </label>
+                <p class = "card-poc">{{card.poc}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class = "details-foot">
+        <h2 class = "steps-label section-label">Steps to Completion</h2>
+        <table style="width:100%">
+            <tr class = "table-header">
+                <th>Task</th>
+                <th>Assigned</th>
+                <th>Status</th>
+            </tr>
+            <tr ng-repeat = "step in card.steps">
+                <td class = "step-task">{{step.task}}</td>
+                <td class = "step-assigned">{{step.assigned}}</td>
+                <td class = "step-status">{{step.status}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+

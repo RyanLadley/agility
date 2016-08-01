@@ -1,10 +1,23 @@
-<div class = "sidebar-container" ng-style = 'pos' ng-mouseleave="compress()" ng-mouseover="expand()" >
+<div class = "sidebar-container" ng-style = 'pos' >
 
-    <div class = "side-menu" >
-        <p>HEllo</p>
+    <div class = "sidemenu" >
+        <sidebar-info class = "sidebar-info sidemenu-items">Place Holder</sidebar-info>
+        <a href = "/" class = "sidemenu-items" ng-class = "{selected : icons.home}"> Home </a>
+        <a href = "/list/epic" class = "sidemenu-items" ng-class = "{selected : icons.epic}"> Epics </a>
+        <a href = "/lise/sprint/current" class = "sidemenu-items" ng-class = "{selected : icons.sprint}"> Sprint </a>
+        <a href = "/list/backlog" class = "sidemenu-items" ng-class = "{selected : icons.backlog}"> Backlog </a>
     </div>
     
-    <div class = "sidebar"></div>
+    <div class = "sidebar">
+        <i class="fa fa-2x fa-lg sidebar-icons expand-icon" 
+           ng-class = "expand ? 'fa-angle-left' : 'fa-angle-right'" ng-click = "toggleExpand()" aria-hidden="true"></i>
+
+        <a  href = "/" <i class="fa fa-home fa-lg sidebar-icons" ng-class = "{selected : icons.home}" aria-hidden="true"></i></a>
+        <a  href = "/list/epic" <i class="fa fa-fighter-jet fa-lg sidebar-icons " ng-class = "{selected : icons.epic}" aria-hidden="true"></i></a>
+        <a  href = "/list/sprint/current" <i class="fa fa-map-o fa-lg sidebar-icons " ng-class = "{selected : icons.sprint}" aria-hidden="true"></i></a>
+        <a  href = "/list/backlog" <i class="fa fa-list-alt fa-lg sidebar-icons " ng-class = "{selected : icons.backlog}" aria-hidden="true"></i></a>
+
+    </div>
 
 
 </div>

@@ -1,0 +1,38 @@
+.discussion-comment{
+    margin-bottom: 5%;
+
+    .comment-header{
+        display: inline-block;
+        width: 100%;
+        border-bottom: 1px solid #D5D5D5;
+        
+        p{
+            margin: 0;
+            padding: 0;
+        }
+
+        .comment-card-id{
+            float: right;
+        }
+
+        .comment-card-name{
+            float: left;
+        }
+    }
+
+    .comment-body{
+        p{
+            margin: 0; 
+        }
+        
+        .comment-user{
+            padding: 0;
+            font-style: italic;
+        } 
+
+        .comment-message{
+            padding: 0 8px;
+            font-size: 13px;
+        }
+    }
+}

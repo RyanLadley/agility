@@ -1,0 +1,10 @@
+<div class = "discussion-comment" ng-repeat  ="comment in discussion">
+    <div class = "comment-header">
+        <p class = "comment-card-name">{{comment.cardName}}</p>
+        <p class = "comment-card-id"> {{comment.cardId}}</p>
+    </div>
+    <div class = "comment-body">
+        <p class = comment-user>{{comment.user}}:</p>
+        <p class = "comment-message">{{comment.message | limitTo:140}}{{comment.message.length > 140 ? '...' : ''}}</p>
+    </div>
+</div>

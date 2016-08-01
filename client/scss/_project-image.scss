@@ -1,0 +1,30 @@
+$circle-diameter: 300px;
+
+.project-icon{
+    background-color: #A94242;
+    width: $circle-diameter;
+    height: $circle-diameter;
+    -moz-border-radius: 100%;
+    border-radius: 100%;
+    border: solid black;
+    margin: 2% auto;
+
+
+    .project-title{
+        background-color: white;
+        position: relative;
+        text-align: center;
+        top: $circle-diameter * 3/4;
+        border-radius: 5px;
+        border: 2px solid black;
+        box-shadow:1px 1px 5px 1px #333333;
+
+        width: 120%;
+        left: -10%;
+
+        h1{
+            margin-top: 1%;
+            margin-bottom: 1%;
+        }
+    }
+}

@@ -3,7 +3,6 @@ from flask import Flask, send_file, request
 
 application = Flask(__name__)
 
-
 #-------------------------------------#
 #--------------Routes-----------------#
 #-------------------------------------#
@@ -27,6 +26,11 @@ def res(resource_path):
 
 #Main The Lounge page
 @application.route('/')
+@application.route('/home')
+@application.route('/card/<card_id>')
+@application.route('/list/epic')
+@application.route('/list/sprint/current')
+@application.route('/list/backlog')
 def initial_page(*args, **kwargs):
     return send_file(client_url +'site/index.html')
 

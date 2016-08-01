@@ -1,0 +1,33 @@
+@import "colors";
+
+.left-container{
+    float: left;
+    margin-left: 3%;
+    min-height: 100%;
+    padding-right: 20px;
+    border-right: 1px solid $section-divide-color;
+
+    .sprint-discussion{
+        width: 250px;
+    }
+}
+
+
+.right-container{
+    margin-left: 400px;
+    margin-right: 2%;
+
+
+    .assigned-header{
+        border-bottom: 1px solid $section-divide-color;
+        margin-top: 100px;
+        width: 100%;
+        text-align: right;
+    }
+
+    .right{
+        float: right;
+        margin-left: 1%;
+    }
+
+ }

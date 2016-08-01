@@ -19,6 +19,7 @@ module.exports = function(grunt) {
         app: {
             files: {
                 './workspace/min-safe/modules.min-safe.js': './components/modules/*.js',
+                './workspace/min-safe/routes.min-safe.js': './components/routes/*.js',
                 './workspace/min-safe/services.min-safe.js': './components/services/*.js',
                 './workspace/min-safe/filters.min-safe.js': './components/filters/*.js',
                 './workspace/min-safe/controllers.min-safe.js': './components/controllers/*.js',
@@ -32,7 +33,7 @@ module.exports = function(grunt) {
           separator: ';',
         },
         dist: {
-            src: ['./workspace/min-safe/modules.min-safe.js','./workspace/min-safe/services.min-safe.js', 
+            src: ['./workspace/min-safe/modules.min-safe.js','./workspace/min-safe/services.min-safe.js', './workspace/min-safe/routes.min-safe.js',
                   './workspace/min-safe/filters.min-safe.js', './workspace/min-safe/controllers.min-safe.js',
                   './workspace/min-safe/directives.min-safe.js'],
             dest: './workspace/workspace.js'
@@ -53,6 +54,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
   // Default task(s).
-  grunt.registerTask('default', ['uglify', 'ngAnnotate', 'concat', 'sass']);
+  grunt.registerTask('default', ['sass', 'ngAnnotate', 'concat', 'uglify']);
 
 };
