@@ -75,6 +75,14 @@ card-two-sided{
                 display: inline-block;
             }
 
+            .status{
+                font-weight: bold;
+                margin: 0;
+                width: 100%;
+            }
+
+            
+
         }
         .card-foot{
             position: absolute;
@@ -167,4 +175,20 @@ card-two-sided.card-back{
      -webkit-transform:  perspective(800px) rotateY(0); 
      transform:  perspective(800px) rotateY(0);   
     }
+}
+
+.status-Open{
+    color: #BF9200;
+}
+
+.status-Development{
+    color: #652372;
+}
+
+.status-QA{
+    color: #232B72;
+}
+
+.status-Closed{
+    color: green;
 }

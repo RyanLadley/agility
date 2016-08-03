@@ -1,4 +1,4 @@
-app.directive('card', function(toggleService) {
+app.directive('card', function() {
     return{
         restrict: 'E',
         controller: 'cardController',

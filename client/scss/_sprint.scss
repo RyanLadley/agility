@@ -1,16 +1,53 @@
 
 .sprint{
+    margin: 3%;
+    min-width: 750px;
+
+    .sprint-header{
+        border-bottom: 2px solid black;
+        margin-bottom: 50px;
+        width: 100%;
+        display: inline-block;
+        position: relative;
+
+
+        .sprint-title{
+            float: left;
+            margin: 0 10px 0 0;
+        }
+
+        .sprint-timeframe{
+            float: left;
+            margin: 12px 0 0 0;
+        }
+
+        .sprint-points{
+            margin: 12px 0 0 0;
+            float: right;
+        }
+    }
+
     .section-title{
-        width: 95%;
-        margin-left: 5%;
-        margin-top: 50px;
-        padding: 0;
+        width:100%;
         
 
-        h1{
-            border-bottom: 2px solid $section-title-blue;
+        h2{
+            border-bottom: 1px solid $section-divide-color;
             margin: 0;
-            width: 500px;
+            width: 100%;
         }
+    }
+
+    .card-container{
+        display: inline-block;
+        margin-bottom: 50px;
+        width: 100%;
+
+        .sprint-card{
+            float:left;
+            margin-right: 1%;
+            margin-bottom: 10px;
+        }
+
     }
 }

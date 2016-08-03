@@ -4,14 +4,8 @@
     margin-top: 20px;
     margin-left: 50px;
     margin-right: 50px;
-    min-width: 1200px;
-
-    .section-label{
-        width: 100%;
-        border-bottom: 1px solid $section-divide-color;
-    }
+    min-width: 1200px; 
 }
-
 .details-header{
     width: 100%;
     display:inline-block;
@@ -78,6 +72,42 @@
 }
 
 .details-foot{
+    .step-header{
+        display: inline-block;
+        margin-bottom: 5px;
+        margin-top: 40px;
+        .steps-label{
+            float: left;
+            margin: 0;
+            margin-right: 10px;
+        }
+
+
+        .remove-step{
+            color: $action-icon-grey;
+            float: right;
+            margin-top: 8px;
+            cursor: pointer;
+
+            &:hover{
+                color: $remove-red;
+            }
+        }
+
+        .add-step{
+            color: $action-icon-grey;
+            float: right;
+            margin-top: 8px;
+            margin-right: 10px;
+            cursor: pointer;
+
+            &:hover{
+                color: $add-green;
+            }
+        }
+       
+    }
+
     table{
         border: 1px solid $section-divide-color;
     }

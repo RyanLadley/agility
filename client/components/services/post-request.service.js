@@ -1,4 +1,4 @@
-app.service('postRequestService', ['$http', function($http){
+app.service('postRequestService', function($http){
 
     //Http post request wrapper to send data to api.
     this.request = function(url, payload) {
@@ -20,4 +20,4 @@ app.service('postRequestService', ['$http', function($http){
             console.log("postRequest: Error");
         });
     };
-}]);
+});

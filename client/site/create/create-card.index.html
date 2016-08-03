@@ -1,0 +1,71 @@
+<div class = "create-card-page">
+    <div class = "details-header standard-header">
+        <h1 class = "card-id">{{newCard.id}}</h1>
+        <input type="text" class = "card-name" placeholder="Card Name" ng-model = "newCard.name">
+        <h3 class = "create-card submit" ng-click = 'createCard()'>
+            <i class="fa fa-check" aria-hidden="true"></i>
+            Create Card
+        </h3>
+    </div>
+
+    <div class = "details-body">
+        <div class = "details-left">
+            <h2 class = "description-label section-label">Description</h1>
+            <textarea class = "card-description" placeholder="Describe the Card" ng-model = "newCard.description"></textarea>
+        </div>
+
+        <div class = "details-right">
+            <h3 class = "details-label section-label"> Details</h3>
+            <div class = "label-value">
+                <label> Assigned Epic: </label>
+                <p class = "card-epic" style = "color: {{newCard.epic.foreColor}}; background-color: {{newCard.epic.backColor}};">{{newCard.epic.name}}</p>
+            </div>
+
+            <div class = "label-value">
+                <label>Created: </label>
+                <p class = "card-created">{{newCard.created | date }}</p>
+            </div>
+            
+            <div class = "label-value">
+                <label>Updated:</label>
+                <p class = "card-modified">{{newCard.modified | date }}</p>
+            </div>
+            
+            <div class = "label-value">
+                <label>Points:</label>
+                <input type="number" class = "card-points" ng-model = "newCard.points">
+            </div>
+
+            <div class = "label-value">
+                <label> Point of Contact: </label>
+                <input type="text" class = "card-points" ng-model = "newCard.poc">
+            </div>
+            <div class = "label-value">
+                <label> Status: </label>
+                <input type="text" class = "card-status" ng-model = "newCard.status">
+            </div>
+        </div>
+    </div>
+
+    <div class = "details-foot">
+        <div class = "step-header section-label">
+            <h2 class = "steps-label">Steps to Completion</h2>
+            <i class = "remove-step fa fa-minus" aria-hidden="true" title = "Remove Step" ng-click = "removeStep()"></i>
+            <i class = "add-step fa fa-plus" aria-hidden="true" title = "Add Step" ng-click = "addStep()"></i>
+
+        </div>
+        <table style="width:100%">
+            <tr class = "table-header">
+                <th class = "step-task">Task</th>
+                <th>Assigned</th>
+                <th>Status</th>
+            </tr>
+            <tr ng-repeat = "step in newCard.steps">
+                <td class = "step-task"><input input type="text" ng-model = "step.task"></td>
+                <td class = "step-assigned"><input input type="text" ng-model = "step.assigned"></td>
+                <td class = "step-status"><input input type="text" ng-model = "step.status"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+

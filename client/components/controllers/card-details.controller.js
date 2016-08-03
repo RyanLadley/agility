@@ -9,6 +9,7 @@ app.controller('cardDetailsController', function($scope){
         points: "1",
         epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
         poc: "Chuck Chuckerson",
+        status: "Closed",
         description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in "
                     +"scelerisque platea auctor.Habitasse vestibulum.",
         steps: [{task: "Do the thing", assigned: "Unknown", status: "Open"}, {task: "Review the thing",  assigned: "Unknown", status: "Open"},

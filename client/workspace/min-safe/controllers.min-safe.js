@@ -9,6 +9,7 @@ app.controller('cardDetailsController', ['$scope', function($scope){
         points: "1",
         epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
         poc: "Chuck Chuckerson",
+        status: "Closed",
         description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in "
                     +"scelerisque platea auctor.Habitasse vestibulum.",
         steps: [{task: "Do the thing", assigned: "Unknown", status: "Open"}, {task: "Review the thing",  assigned: "Unknown", status: "Open"},
@@ -22,6 +23,33 @@ app.controller('cardController', ['$scope', function($scope){
         $scope.front = !$scope.front
     }
 
+}]);
+app.controller('createCardController', ['$scope', 'postRequestService', function($scope, postRequestService){
+    $scope.newCard =
+    {
+        id: "ABC-123",
+        name: "",
+        type: "", //TODO Create Drop down
+        created: new Date(),
+        modified: new Date(),
+        points: "",
+        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"}, //TODO Create Drop down
+        poc: "",
+        status: "Open",
+        description: "",
+        steps: []
+    }
+
+    $scope.addStep = function(){
+        $scope.newCard.steps.push({task: "",  assigned: "Not Assigned", status: "Open"});
+    }
+
+    $scope.createCard = function(){
+        console.log("Fired");
+        postRequestService.request('/api/create/card', $scope.newCard).then(function(response){
+            console.log("Internal Success!!");
+        });
+    }
 }]);
 app.controller('homeController', ['$scope', function($scope){
 
@@ -130,13 +158,22 @@ app.controller('sidebarController', ['$scope', '$location', function($scope, $lo
     });
 }]);
 app.controller('sprintController', ['$scope', function($scope){
-  
+    
+    $scope.sprint = {
+        start: new Date(),
+        end: new Date(),
+        points: "43"
+    }
+
+
     $scope.cards = [
     {
         id: "abc-123",
         name: "First Card",
         points: "1",
+        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
         poc: "Chuck Chuckerson",
+        status: "Closed",
         description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
     },
     {
@@ -144,20 +181,26 @@ app.controller('sprintController', ['$scope', function($scope){
         name: "Second Card",
         points: "2",
         poc: "Bob McBober",
+        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
+        status: "Development",
         description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
     },
     {
         id: "abc-123",
         name: "Third Card",
         points: "2",
+        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
         poc: "Katie Cat",
+        status: "QA",
         description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
     },
     {
         id: "abc-123",
         name: "Fourth Card",
+        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
         points: "2",
         poc: "Lama Beans",
+        status: "Open",
         description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
     }];
 

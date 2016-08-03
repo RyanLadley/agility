@@ -1,4 +1,4 @@
-app.directive('card', ['toggleService', function(toggleService) {
+app.directive('card', function() {
     return{
         restrict: 'E',
         controller: 'cardController',
@@ -7,7 +7,7 @@ app.directive('card', ['toggleService', function(toggleService) {
         },
        templateUrl: '/res/components/directives/card/card.template.html'
     };
-}])
+})
 app.directive('discussionBoard', function() {
     return{
         restrict: 'E',

@@ -18,6 +18,12 @@ app.config(['$routeProvider', '$locationProvider',
             templateUrl: '/res/site/card/card.index.html'
         }
     )
+    .when("/create/card",
+        {
+            controller: 'createCardController',
+            templateUrl: '/res/site/create/create-card.index.html'
+        }
+    )
     .otherwise("/",
     {
         redirectTo: "/"

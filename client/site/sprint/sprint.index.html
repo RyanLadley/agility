@@ -1,8 +1,23 @@
 <div class = "sprint" ng-controller = "sprintController">
-    <div class = "section-title">
-        <h1 class = "test">User Stories</h1>
+    <div class = "sprint-header">
+        <h1 class = sprint-title>Current Sprint</h1>
+        <h3 class = "sprint-timeframe"> {{sprint.start | date}} - {{sprint.end | date}}</h3>
+        <h3 class = "sprint-points"> Total Points: {{sprint.points}}</h3>
     </div>
-    <div ng-repeat = 'card in cards'>
-        <card card = 'card' ></card>
+    <div class = "section-title">
+        <h2 class = "test">User Stories</h2>
+    </div>
+    <div class = card-container>
+        <div ng-repeat = 'card in cards'>
+            <card  class = "sprint-card" card = 'card' ></card>
+        </div>
+    </div>
+    <div class = "section-title">
+        <h2 class = "spike"> Sprint Spikes</h2>
+    </div>
+    <div class = card-container>
+        <div ng-repeat = 'card in cards'>
+            <card class = "sprint-card" card = 'card' ></card>
+        </div>
     </div>
 </div>

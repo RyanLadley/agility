@@ -1,0 +1,51 @@
+//Most styling for this page is handled with the _card-details.scss file
+
+.create-card-page{
+    margin-top: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+    min-width: 1200px; 
+
+    .create-card{
+        float:right;
+        border: solid 1px;
+        border-radius: 3px;
+        padding: 5px;
+        margin:0;
+        margin-top: 20px;
+        cursor: pointer;
+
+        i{
+            color: green;
+        }
+
+        &:hover{
+            -moz-box-shadow:    inset 0 0 3px 1px #000000;
+            -webkit-box-shadow: inset 0 0 3px 1px #000000;
+            box-shadow:         inset 0 0 3px 1px #000000;
+        }
+    }
+
+    textarea{
+        width:100%;
+        height: 320px;
+    }
+
+    input.card-name{
+        float: left;
+        margin-top: 15px;
+        margin-right: 5px;
+        font-weight: bold;
+        font-size: 25px;
+        width: 25%;
+    }
+
+    table{
+        .step-task{
+            width: 70%;
+        }
+        input{
+            width: 99%;
+        }
+    }
+}

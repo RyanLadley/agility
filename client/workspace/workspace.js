@@ -1,11 +1,29 @@
 var app = angular.module('app', ['ngRoute', 'ngCookies'], ['$locationProvider', function($locationProvider){
     $locationProvider.html5Mode(true);
 }]);
-;app.service('toggleService', function(){
-    this.toggle = function(bool){
-        return !bool;
-    }
-});;app.config(['$routeProvider', '$locationProvider', 
+;app.service('postRequestService', ['$http', function($http){
+
+    //Http post request wrapper to send data to api.
+    this.request = function(url, payload) {
+        var form = new FormData()
+        form.append("payload", JSON.stringify(payload))
+
+        return $http.post(url, form, {
+            withCredentials : false,
+            headers : {
+                'Content-Type' : undefined
+            },
+            transformRequest : angular.identity
+        }).then(
+        function(success){
+            console.log("postRequest: Sueccess");
+        }, 
+        //Error
+        function(error){
+            console.log("postRequest: Error");
+        });
+    };
+}]);;app.config(['$routeProvider', '$locationProvider', 
     function($routeProvider, $locationProvider){
     $routeProvider
     .when("/",
@@ -25,6 +43,12 @@ var app = angular.module('app', ['ngRoute', 'ngCookies'], ['$locationProvider', 
             templateUrl: '/res/site/card/card.index.html'
         }
     )
+    .when("/create/card",
+        {
+            controller: 'createCardController',
+            templateUrl: '/res/site/create/create-card.index.html'
+        }
+    )
     .otherwise("/",
     {
         redirectTo: "/"
@@ -40,6 +64,7 @@ var app = angular.module('app', ['ngRoute', 'ngCookies'], ['$locationProvider', 
         points: "1",
         epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
         poc: "Chuck Chuckerson",
+        status: "Closed",
         description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in "
                     +"scelerisque platea auctor.Habitasse vestibulum.",
         steps: [{task: "Do the thing", assigned: "Unknown", status: "Open"}, {task: "Review the thing",  assigned: "Unknown", status: "Open"},
@@ -53,6 +78,33 @@ app.controller('cardController', ['$scope', function($scope){
         $scope.front = !$scope.front
     }
 
+}]);
+app.controller('createCardController', ['$scope', 'postRequestService', function($scope, postRequestService){
+    $scope.newCard =
+    {
+        id: "ABC-123",
+        name: "",
+        type: "", //TODO Create Drop down
+        created: new Date(),
+        modified: new Date(),
+        points: "",
+        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"}, //TODO Create Drop down
+        poc: "",
+        status: "Open",
+        description: "",
+        steps: []
+    }
+
+    $scope.addStep = function(){
+        $scope.newCard.steps.push({task: "",  assigned: "Not Assigned", status: "Open"});
+    }
+
+    $scope.createCard = function(){
+        console.log("Fired");
+        postRequestService.request('/api/create/card', $scope.newCard).then(function(response){
+            console.log("Internal Success!!");
+        });
+    }
 }]);
 app.controller('homeController', ['$scope', function($scope){
 
@@ -161,13 +213,22 @@ app.controller('sidebarController', ['$scope', '$location', function($scope, $lo
     });
 }]);
 app.controller('sprintController', ['$scope', function($scope){
-  
+    
+    $scope.sprint = {
+        start: new Date(),
+        end: new Date(),
+        points: "43"
+    }
+
+
     $scope.cards = [
     {
         id: "abc-123",
         name: "First Card",
         points: "1",
+        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
         poc: "Chuck Chuckerson",
+        status: "Closed",
         description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
     },
     {
@@ -175,24 +236,30 @@ app.controller('sprintController', ['$scope', function($scope){
         name: "Second Card",
         points: "2",
         poc: "Bob McBober",
+        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
+        status: "Development",
         description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
     },
     {
         id: "abc-123",
         name: "Third Card",
         points: "2",
+        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
         poc: "Katie Cat",
+        status: "QA",
         description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
     },
     {
         id: "abc-123",
         name: "Fourth Card",
+        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
         points: "2",
         poc: "Lama Beans",
+        status: "Open",
         description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
     }];
 
-}]);;app.directive('card', ['toggleService', function(toggleService) {
+}]);;app.directive('card', function() {
     return{
         restrict: 'E',
         controller: 'cardController',
@@ -201,7 +268,7 @@ app.controller('sprintController', ['$scope', function($scope){
         },
        templateUrl: '/res/components/directives/card/card.template.html'
     };
-}])
+})
 app.directive('discussionBoard', function() {
     return{
         restrict: 'E',

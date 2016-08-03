@@ -1,7 +1,7 @@
 <div class = "details-page">
     <div class = "details-header standard-header">
-        <h1 class = "card-name">{{card.id}}</h1>
-        <h1 class = "card-id">{{card.name}}</h1>
+        <h1 class = "card-id">{{card.id}}</h1>
+        <h1 class = "card-name">{{card.name}}</h1>
     </div>
 
     <div class = "details-body">
@@ -36,6 +36,11 @@
                 <label> Point of Contact: </label>
                 <p class = "card-poc">{{card.poc}}</p>
             </div>
+
+            <div class = "label-value">
+                <label> Status: </label>
+                <p class = "card-status status-{{card.status}}" >{{card.status}}</p>
+            </div>
         </div>
     </div>
 
@@ -50,7 +55,7 @@
             <tr ng-repeat = "step in card.steps">
                 <td class = "step-task">{{step.task}}</td>
                 <td class = "step-assigned">{{step.assigned}}</td>
-                <td class = "step-status">{{step.status}}</td>
+                <td class = "step-status status-{{step.status}}">{{step.status}}</td>
             </tr>
         </table>
     </div>

@@ -2,6 +2,7 @@
 @import "home";
 @import "card";
 @import "card-details";
+@import "create-card";
 @import "sprint";
 @import "project-image";
 @import "discussion-board";
@@ -11,4 +12,9 @@ body{
     overflow-x: auto;
 	margin: 0;
 	padding: 0;
+}
+
+.section-label{
+    width: 100%;
+    border-bottom: 1px solid $section-divide-color;
 }
