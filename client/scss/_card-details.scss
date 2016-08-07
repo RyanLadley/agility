@@ -72,40 +72,41 @@
 }
 
 .details-foot{
-    .step-header{
-        display: inline-block;
-        margin-bottom: 5px;
-        margin-top: 40px;
-        .steps-label{
-            float: left;
-            margin: 0;
-            margin-right: 10px;
-        }
-
-
-        .remove-step{
-            color: $action-icon-grey;
-            float: right;
-            margin-top: 8px;
-            cursor: pointer;
-
-            &:hover{
-                color: $remove-red;
+    .steps{
+        .step-header{
+            display: inline-block;
+            margin-bottom: 5px;
+            margin-top: 40px;
+            .steps-label{
+                float: left;
+                margin: 0;
+                margin-right: 10px;
             }
-        }
 
-        .add-step{
-            color: $action-icon-grey;
-            float: right;
-            margin-top: 8px;
-            margin-right: 10px;
-            cursor: pointer;
 
-            &:hover{
-                color: $add-green;
+            .remove-step{
+                color: $action-icon-grey;
+                float: right;
+                margin-top: 8px;
+                cursor: pointer;
+
+                &:hover{
+                    color: $remove-red;
+                }
             }
-        }
-       
+
+            .add-step{
+                color: $action-icon-grey;
+                float: right;
+                margin-top: 8px;
+                margin-right: 10px;
+                cursor: pointer;
+
+                &:hover{
+                    color: $add-green;
+                }
+            }
+        } 
     }
 
     table{

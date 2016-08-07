@@ -16,7 +16,8 @@ var app = angular.module('app', ['ngRoute', 'ngCookies'], ['$locationProvider', 
             transformRequest : angular.identity
         }).then(
         function(success){
-            console.log("postRequest: Sueccess");
+            console.log(success);
+            return success;
         }, 
         //Error
         function(error){
@@ -34,6 +35,7 @@ var app = angular.module('app', ['ngRoute', 'ngCookies'], ['$locationProvider', 
     )
     .when("/list/sprint/current",
         {
+            controller: 'sprintController',
             templateUrl: '/res/site/sprint/sprint.index.html'
         }
     )
@@ -53,23 +55,34 @@ var app = angular.module('app', ['ngRoute', 'ngCookies'], ['$locationProvider', 
     {
         redirectTo: "/"
     })
-}]);;;app.controller('cardDetailsController', ['$scope', function($scope){
-    $scope.card =
-    {
-        id: "abc-123",
-        name: "First Card",
-        type: "standard",
-        created: new Date(),
-        modified: new Date(),
-        points: "1",
-        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
-        poc: "Chuck Chuckerson",
-        status: "Closed",
-        description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in "
-                    +"scelerisque platea auctor.Habitasse vestibulum.",
-        steps: [{task: "Do the thing", assigned: "Unknown", status: "Open"}, {task: "Review the thing",  assigned: "Unknown", status: "Open"},
-            {task: "Test the thing",  assigned: "Unknown", status: "Open"},{task: "Do a much longer thing to take up space and turn it in", assigned: "Unknown", status: "Open"},]
+}]);;;app.controller('addCardToSprintController', ['$scope', '$location', '$route', 'postRequestService', function($scope,$location, $route, postRequestService){
+
+
+    postRequestService.request('/api/cards/get/backlog').then(function(request){
+        console.log(request)
+        $scope.availableCards = request.data.response
+    })
+
+
+    $scope.cancel = function(){
+        $route.reload();
     }
+
+    $scope.cardId = ''
+    $scope.add = function(){
+        api_url = '/api/sprint/' +$scope.sprint.id + '/add/card/' + $scope.cardId;
+        console.log(api_url)
+        postRequestService.request(api_url)
+    }
+}])
+    
+   
+app.controller('cardDetailsController', ['$scope', '$routeParams', 'postRequestService', function($scope, $routeParams, postRequestService){
+    postRequestService.request('/api/get/card/standard/' +$routeParams.cardId).then(function(success){
+        console.log(success)
+        $scope.card = success.data.response;
+    })
+
 }]);
 app.controller('cardController', ['$scope', function($scope){
   
@@ -82,19 +95,33 @@ app.controller('cardController', ['$scope', function($scope){
 app.controller('createCardController', ['$scope', 'postRequestService', function($scope, postRequestService){
     $scope.newCard =
     {
-        id: "ABC-123",
-        name: "",
-        type: "", //TODO Create Drop down
-        created: new Date(),
-        modified: new Date(),
-        points: "",
-        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"}, //TODO Create Drop down
-        poc: "",
-        status: "Open",
-        description: "",
+        cardIndex: "",
+        cardName: "",
+        cardType: "", //TODO Create Drop down
+        cardCreated: new Date(),
+        cardUpdated: new Date(),
+        cardPoints: "",
+        cardPoc: "",
+        cardStatus: "Open", //TODO Create Drop Down
+        cardDescription: "",
+        epicName: "Build App", 
+        epicBackgroundColor : "#5A8A5C", 
+        epicForegroundColor : "#FFFFFF", //TODO Create Drop down
         steps: []
     }
 
+
+    postRequestService.request('/api/page/create/standard', $scope.newCard).then(function(success){
+            console.log(success.data.response)
+            $scope.newCard.cardIndex = success.data.response.card_index;
+            $scope.statuses = success.data.response.statuses;
+
+            unassigned = [{'id' : 0 ,'first_name' : 'Unassigned'}]
+            $scope.users = unassigned.concat(success.data.response.users);
+
+            $scope.newCard.cardPoc = 0;
+    });
+    
     $scope.addStep = function(){
         $scope.newCard.steps.push({task: "",  assigned: "Not Assigned", status: "Open"});
     }
@@ -102,63 +129,66 @@ app.controller('createCardController', ['$scope', 'postRequestService', function
     $scope.createCard = function(){
         console.log("Fired");
         postRequestService.request('/api/create/card', $scope.newCard).then(function(response){
-            console.log("Internal Success!!");
+            console.log("Create Card: You Probably Want to do something here");
         });
     }
 }]);
-app.controller('homeController', ['$scope', function($scope){
+app.controller('homeController', ['$scope', 'postRequestService', function($scope, postRequestService){
 
     $scope.discussion = [
     {
-        cardId: 'abc-123',
+        cardIndex: 'abc-123',
         cardName: "First Card",
         cardType: "card",
         user: "Chuch Jones",
         message: "Te pro legimus gloriatur referrentur, altera impedit gloriatur eu quo, admodum consulatu id vim. Eu homero tempor eos, mea laoreet consetetur an. Vim diam oporteat moderatius ad. Mei cu mundi fabellas, usu mundi sanctus albucius ea. Eam at aeque erroribus omittantur, eam simul mediocritatem no, nulla dicant ornatus eu mei."
     },
     {
-        cardId: 'abc-456',
+        cardIndex: 'abc-456',
         cardName: "A longer Title",
         cardType: "card",
         user: "Lama Lee",
         message: "Te pro legimus gloriatur referrentur, altera impedit gloriatur eu quo, admodum consulatu id vim. Eu homero tempor eos, mea laoreet consetetur an. Vim diam oporteat moderatius ad. Mei cu mundi fabellas, usu mundi sanctus albucius ea. Eam at aeque erroribus omittantur, eam simul mediocritatem no, nulla dicant ornatus eu mei."
     }];  
 
-    $scope.cards = [
-    {
-        id: "abc-123",
-        name: "First Card",
-        points: "1",
-        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
-        poc: "Chuck Chuckerson",
-        description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
-    },
-    {
-        id: "abc-123",
-        name: "Second Card",
-        points: "2",
-        poc: "Bob McBober",
-        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
-        description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
-    },
-    {
-        id: "abc-123",
-        name: "Third Card",
-        points: "2",
-        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
-        poc: "Katie Cat",
-        description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
-    },
-    {
-        id: "abc-123",
-        name: "Fourth Card",
-        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
-        points: "2",
-        poc: "Lama Beans",
-        description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
-    }];
+    postRequestService.request('/api/page/home').then(function(success){
+        $scope.cards = success.data.response.cards;
+        $scope.sprint = success.data.response.sprint
+        console.log($scope.sprint.id)
+    })
+    
+    $scope.confirmSprintClosure = function(){
+        var confirmed = confirm("Are you sure you want to close the sprint?\nAny card not closed will be moved to the backlog.")
+        if(confirmed){
+            postRequestService.request('/api/sprint/close').then(function(success){})
+        }
+
+    }
+
+    $scope.displayOpenSprint = false
 
 }]);
+app.controller('openSprintController', ['$scope', '$location', '$route', 'postRequestService', function($scope,$location, $route, postRequestService){
+
+    var month = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+
+    $scope.sprint = {
+        name: "Sprint for " + month[new Date().getMonth()],
+        endDate: 4
+    }
+
+    $scope.cancel = function(){
+        $location.url("/")
+        $route.reload() //TODO make it so this is not neccisary
+    }
+
+    $scope.open = function(){
+        postRequestService.request('/api/sprint/open', $scope.sprint)
+    }
+}]);
+    
+   
 app.controller('sidebarController', ['$scope', '$location', function($scope, $location){
   
     $scope.abs
@@ -212,54 +242,30 @@ app.controller('sidebarController', ['$scope', '$location', function($scope, $lo
         };
     });
 }]);
-app.controller('sprintController', ['$scope', function($scope){
+app.controller('sprintController', ['$scope', '$location', 'postRequestService', function($scope, $location, postRequestService){
     
-    $scope.sprint = {
-        start: new Date(),
-        end: new Date(),
-        points: "43"
+    postRequestService.request('/api/sprint/get/current_with_cards').then(function(request){
+        console.log(request.data.status)
+        $scope.sprint = request.data.response
+    })
+
+
+    $scope.addCardPrompt = false;
+    $scope.addCard = function(){
+        $scope.addCardPrompt = true;
     }
-
-
-    $scope.cards = [
-    {
-        id: "abc-123",
-        name: "First Card",
-        points: "1",
-        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
-        poc: "Chuck Chuckerson",
-        status: "Closed",
-        description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
-    },
-    {
-        id: "abc-123",
-        name: "Second Card",
-        points: "2",
-        poc: "Bob McBober",
-        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
-        status: "Development",
-        description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
-    },
-    {
-        id: "abc-123",
-        name: "Third Card",
-        points: "2",
-        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
-        poc: "Katie Cat",
-        status: "QA",
-        description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
-    },
-    {
-        id: "abc-123",
-        name: "Fourth Card",
-        epic: {name: "Build App", backColor : "#5A8A5C", foreColor : "#FFFFFF"},
-        points: "2",
-        poc: "Lama Beans",
-        status: "Open",
-        description: "Mattis a semper rutrum in in blandit adipiscing ornare commodo vitae at erat vivamus fringilla maecenas in scelerisque platea auctor.Habitasse vestibulum."
-    }];
-
-}]);;app.directive('card', function() {
+}]);;app.directive('addCardToSprint', function() {
+    return{
+        restrict: 'E',
+        controller: 'addCardToSprintController',
+        scope: {
+            display: '=',
+            sprint: '='
+        },
+       templateUrl: '/res/components/directives/add-card-to-sprint/add-card-to-sprint.template.html',
+    };
+})
+app.directive('card', function() {
     return{
         restrict: 'E',
         controller: 'cardController',
@@ -277,6 +283,21 @@ app.directive('discussionBoard', function() {
             discussion: '='
         },
        templateUrl: '/res/components/directives/discussion-board/discussion-board.template.html'
+    };
+})
+app.directive('openSprint', function() {
+    return{
+        restrict: 'E',
+        controller: 'openSprintController',
+        scope: {
+            display: '='
+        },
+       templateUrl: '/res/components/directives/open-sprint/open-sprint.template.html',
+       link: function (scope, element, attr) {
+            scope.toggleDisplay = function() {
+                scope.display = false;
+            };
+        }
     };
 })
 app.directive('projectImage', function() {

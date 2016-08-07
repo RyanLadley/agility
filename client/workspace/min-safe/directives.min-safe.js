@@ -1,3 +1,14 @@
+app.directive('addCardToSprint', function() {
+    return{
+        restrict: 'E',
+        controller: 'addCardToSprintController',
+        scope: {
+            display: '=',
+            sprint: '='
+        },
+       templateUrl: '/res/components/directives/add-card-to-sprint/add-card-to-sprint.template.html',
+    };
+})
 app.directive('card', function() {
     return{
         restrict: 'E',
@@ -16,6 +27,21 @@ app.directive('discussionBoard', function() {
             discussion: '='
         },
        templateUrl: '/res/components/directives/discussion-board/discussion-board.template.html'
+    };
+})
+app.directive('openSprint', function() {
+    return{
+        restrict: 'E',
+        controller: 'openSprintController',
+        scope: {
+            display: '='
+        },
+       templateUrl: '/res/components/directives/open-sprint/open-sprint.template.html',
+       link: function (scope, element, attr) {
+            scope.toggleDisplay = function() {
+                scope.display = false;
+            };
+        }
     };
 })
 app.directive('projectImage', function() {

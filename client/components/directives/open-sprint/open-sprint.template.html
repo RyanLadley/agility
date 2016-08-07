@@ -1,0 +1,27 @@
+<div class = "prompt" >
+    <div class = "prompt-input open-sprint">
+        <h2 class = 'section-label new-sprint-label' > Want to start a new sprint? </h2>
+    
+        <div class = 'label-value'>
+            <label> Sprint Name</label>
+            <input type="text" name="sprint-name" ng-model = "sprint.name">  
+        </div>
+        <div class = "dates">
+            <div class = 'label-value start-date'>
+                <label> Starts</label>
+                <p> Today</p>
+            </div>
+
+            <div class = 'label-value end-date'>
+                <label> Ends in </label>
+                <select class = "card-poc" ng-model = "sprint.endDate" ng-options = "i for i in [1,2,3,4,5]"></select>
+                <p>weeks<p>
+            </div>
+        </div>
+
+        <div>
+            <button ng-click = "cancel()">Cancel</button>
+            <button ng-click = "open()">Open Sprint</button>
+        </div>
+    </div>
+</div>

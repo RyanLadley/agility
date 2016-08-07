@@ -1,7 +1,7 @@
 <div class = "create-card-page">
     <div class = "details-header standard-header">
-        <h1 class = "card-id">{{newCard.id}}</h1>
-        <input type="text" class = "card-name" placeholder="Card Name" ng-model = "newCard.name">
+        <h1 class = "card-index">{{newCard.cardIndex}}</h1>
+        <input type="text" class = "card-name" placeholder="Card Name" ng-model = "newCard.cardName">
         <h3 class = "create-card submit" ng-click = 'createCard()'>
             <i class="fa fa-check" aria-hidden="true"></i>
             Create Card
@@ -11,61 +11,77 @@
     <div class = "details-body">
         <div class = "details-left">
             <h2 class = "description-label section-label">Description</h1>
-            <textarea class = "card-description" placeholder="Describe the Card" ng-model = "newCard.description"></textarea>
+            <textarea class = "card-description" placeholder="Describe the Card" ng-model = "newCard.cardDescription"></textarea>
         </div>
 
         <div class = "details-right">
             <h3 class = "details-label section-label"> Details</h3>
             <div class = "label-value">
                 <label> Assigned Epic: </label>
-                <p class = "card-epic" style = "color: {{newCard.epic.foreColor}}; background-color: {{newCard.epic.backColor}};">{{newCard.epic.name}}</p>
+                <p class = "card-epic" style = "color: {{newCard.epicForegroundColor}}; background-color: {{newCard.epicBackgroundColor}};">
+                    {{newCard.epicName}}
+                </p>
             </div>
 
             <div class = "label-value">
                 <label>Created: </label>
-                <p class = "card-created">{{newCard.created | date }}</p>
+                <p class = "card-created">{{newCard.cardCreated | date }}</p>
             </div>
             
             <div class = "label-value">
                 <label>Updated:</label>
-                <p class = "card-modified">{{newCard.modified | date }}</p>
+                <p class = "card-modified">{{newCard.cardUpdated | date }}</p>
             </div>
             
             <div class = "label-value">
                 <label>Points:</label>
-                <input type="number" class = "card-points" ng-model = "newCard.points">
+                <input type="number" class = "card-points" ng-model = "newCard.cardPoints">
             </div>
 
             <div class = "label-value">
                 <label> Point of Contact: </label>
-                <input type="text" class = "card-points" ng-model = "newCard.poc">
+                <select class = "card-poc" ng-model = "newCard.cardPoc" ng-options = "user.id as (user.first_name +' '+ user.last_name) for user in users">
+                    
+                </select>
             </div>
             <div class = "label-value">
                 <label> Status: </label>
-                <input type="text" class = "card-status" ng-model = "newCard.status">
+                <select class = "card-status" ng-model = "newCard.cardStatus">
+                  <option ng-repeat = "status in statuses" value = "{{status}}">{{status}}</option> 
+                </select>
             </div>
         </div>
     </div>
 
     <div class = "details-foot">
-        <div class = "step-header section-label">
-            <h2 class = "steps-label">Steps to Completion</h2>
-            <i class = "remove-step fa fa-minus" aria-hidden="true" title = "Remove Step" ng-click = "removeStep()"></i>
-            <i class = "add-step fa fa-plus" aria-hidden="true" title = "Add Step" ng-click = "addStep()"></i>
+        <div class = "step">
+            <div class = "step-header section-label">
+                <h2 class = "steps-label">Steps to Completion</h2>
+                <i class = "remove-step fa fa-minus" aria-hidden="true" title = "Remove Step" ng-click = "removeStep()"></i>
+                <i class = "add-step fa fa-plus" aria-hidden="true" title = "Add Step" ng-click = "addStep()"></i>
 
+            </div>
+            <table style="width:100%">
+                <tr class = "table-header">
+                    <th class = "step-task">Task</th>
+                    <th>Assigned</th>
+                    <th>Status</th>
+                </tr>
+                <tr ng-repeat = "step in newCard.steps">
+                    <td class = "step-task"><input input type="text" ng-model = "step.task"></td>
+                    <td class = "step-assigned">
+                        <select class = "card-points" ng-model = "step.assigned" ng-init = "step.assigned = 0">
+                          <option ng-repeat = "user in users" value = "{{user.id}}">{{user.first_name}} {{user.last_name}}</option> 
+                        </select>
+                    </td>
+                    <td class = "step-status">
+                        <select ng-model = "step.status">
+                          <option ng-repeat = "status in statuses" value = "{{status}}">{{status}}</option> 
+                        </select>
+                    </td>
+                </tr>
+            </table>
         </div>
-        <table style="width:100%">
-            <tr class = "table-header">
-                <th class = "step-task">Task</th>
-                <th>Assigned</th>
-                <th>Status</th>
-            </tr>
-            <tr ng-repeat = "step in newCard.steps">
-                <td class = "step-task"><input input type="text" ng-model = "step.task"></td>
-                <td class = "step-assigned"><input input type="text" ng-model = "step.assigned"></td>
-                <td class = "step-status"><input input type="text" ng-model = "step.status"></td>
-            </tr>
-        </table>
     </div>
 </div>
 

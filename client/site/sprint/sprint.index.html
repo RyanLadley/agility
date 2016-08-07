@@ -1,18 +1,20 @@
-<div class = "sprint" ng-controller = "sprintController">
+<div ng-if = "sprint.id != 'None'" class = "sprint">
     <div class = "sprint-header">
-        <h1 class = sprint-title>Current Sprint</h1>
-        <h3 class = "sprint-timeframe"> {{sprint.start | date}} - {{sprint.end | date}}</h3>
+        <h1 class = sprint-title>{{sprint.name}}</h1>
+        <h3 class = "sprint-timeframe" ng-if = "sprint.start_date != 'None' && sprint.end_date != 'None'"> {{sprint.start_date | date}} - {{sprint.end_date | date}}</h3>
         <h3 class = "sprint-points"> Total Points: {{sprint.points}}</h3>
     </div>
-    <div class = "section-title">
+    <div class = "section-label sprint-section">
         <h2 class = "test">User Stories</h2>
+        <i class = "remove-from-sprint fa fa-minus" aria-hidden="true" title = "Remove Step" ng-click = "removeCard()"></i>
+        <i class = "add-to-sprint fa fa-plus" aria-hidden="true" title = "Add Step" ng-click = "addCard()"></i>
     </div>
     <div class = card-container>
-        <div ng-repeat = 'card in cards'>
+        <div ng-repeat = 'card in sprint.cards'>
             <card  class = "sprint-card" card = 'card' ></card>
         </div>
     </div>
-    <div class = "section-title">
+    <div class = "section-label sprint-section">
         <h2 class = "spike"> Sprint Spikes</h2>
     </div>
     <div class = card-container>
@@ -21,3 +23,6 @@
         </div>
     </div>
 </div>
+
+<open-sprint ng-if = "sprint.id == 'None'"></open-sprint>
+<add-card-to-sprint ng-if = "addCardPrompt" sprint = 'sprint'></add-card-to-sprint>

@@ -9,6 +9,7 @@ app.config(['$routeProvider', '$locationProvider',
     )
     .when("/list/sprint/current",
         {
+            controller: 'sprintController',
             templateUrl: '/res/site/sprint/sprint.index.html'
         }
     )

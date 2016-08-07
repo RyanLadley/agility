@@ -1,50 +1,28 @@
 #! env/bin/python3.4
-from flask import Flask, send_file, request
+from flask import Flask
 
 application = Flask(__name__)
 
 #-------------------------------------#
 #--------------Routes-----------------#
 #-------------------------------------#
+from client import client_side
+import client.routes
 
-####################################
-#___________Client Side____________#
+application.register_blueprint(client_side)
 
+from api.core.pages import page
+import api.core.pages.home_page
+import api.core.pages.card_creation_page
 
-#path to client side site folder
-client_url = "client/"
+application.register_blueprint(page, url_prefix='/api/page')
 
+from api.core.workflow import workflow
+import api.core.workflow.card_workflow
+import api.core.workflow.sprint_workflow
 
-#Route For Client Side Resources (JS, CSS, Non-DB Images, etc)
-@application.route('/res/<path:resource_path>')
-def res(resource_path):
-    if ".." not in resource_path: 
-        return send_file(client_url +resource_path)
-    return False
+application.register_blueprint(workflow, url_prefix='/api')
 
-
-#Routes For Web Pages
-
-#Main Agility Page
-@application.route('/')
-@application.route('/home')
-@application.route('/card/<card_id>')
-@application.route('/create/card')
-@application.route('/list/epic')
-@application.route('/list/sprint/current')
-@application.route('/list/backlog')
-def initial_page(*args, **kwargs):
-    return send_file(client_url +'site/index.html')
-
-
-#######################################
-#______________API____________________#
-
-#Add Card
-@application.route('/api/create/card', methods = ['POST'])
-def create_card():
-    print(request.form['payload']);
-    return "Nothing"
 
 if __name__ == "__main__":
     application.run(debug = True)

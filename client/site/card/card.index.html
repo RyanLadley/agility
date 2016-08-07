@@ -1,6 +1,6 @@
 <div class = "details-page">
     <div class = "details-header standard-header">
-        <h1 class = "card-id">{{card.id}}</h1>
+        <h1 class = "card-index">{{card.index}}</h1>
         <h1 class = "card-name">{{card.name}}</h1>
     </div>
 
@@ -14,7 +14,7 @@
             <h3 class = "details-label section-label"> Details</h3>
             <div class = "label-value">
                 <label> Assigned Epic: </label>
-                <p class = "card-epic" style = "color: {{card.epic.foreColor}}; background-color: {{card.epic.backColor}};">{{card.epic.name}}</p>
+                <p class = "card-epic" style = "color: {{card.epic.foreground_color}}; background-color: {{card.epic.background_color}};">{{card.epic.name}}</p>
             </div>
 
             <div class = "label-value">

@@ -1,0 +1,32 @@
+.open-sprint{
+    width: 400px;
+
+    .new-sprint-label{
+        margin-top: 0;
+    }
+
+    .dates{
+        display: inline-block;
+        .start-date{
+            float: left;
+            margin-right: 50px;
+        }
+        .end-date{
+            float: right;
+        
+        }
+    }
+    .label-value{
+        margin: 0 0 10px 0;
+
+        label{
+            margin-right: 3px;
+            font-weight: bold;
+        }
+
+        p{
+            margin:0;
+            display: inline-block;
+        }
+    }
+}

@@ -27,14 +27,33 @@
         }
     }
 
-    .section-title{
-        width:100%;
-        
-
+    .sprint-section{
+        display:inline-block;
         h2{
-            border-bottom: 1px solid $section-divide-color;
-            margin: 0;
-            width: 100%;
+            float:left;
+            margin:0;
+        }
+        .remove-from-sprint{
+            color: $action-icon-grey;
+            float: right;
+            margin-top: 8px;
+            cursor: pointer;
+
+            &:hover{
+                color: $remove-red;
+            }
+        }
+
+        .add-to-sprint{
+            color: $action-icon-grey;
+            float: right;
+            margin-top: 8px;
+            margin-right: 10px;
+            cursor: pointer;
+
+            &:hover{
+                color: $add-green;
+            }
         }
     }
 

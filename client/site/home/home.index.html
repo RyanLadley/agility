@@ -10,6 +10,8 @@
         <div class = "project-info">
             <div class = "home-menu">
                 <a href = /create/card> Add a new card </a>
+                <p ng-click = "confirmSprintClosure()" ng-if = "sprint.id != 'None'"> Close Current Sprint <p>
+                <p ng-click = "displayOpenSprint = !displayOpenSprint" ng-if = "sprint.id == 'None'"> Open New Sprint</p>
             </div>
             <div class = "project-image">
                 <project-image></project-image>
@@ -24,3 +26,5 @@
         
     </div>
 </div>
+
+<open-sprint ng-if = "displayOpenSprint" display = "displayOpenSprint" ></open-sprint>

@@ -13,7 +13,8 @@ app.service('postRequestService', ['$http', function($http){
             transformRequest : angular.identity
         }).then(
         function(success){
-            console.log("postRequest: Sueccess");
+            console.log(success);
+            return success;
         }, 
         //Error
         function(error){

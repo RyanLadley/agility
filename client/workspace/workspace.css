@@ -8,7 +8,7 @@
   overflow: hidden;
   position: fixed;
   width: 50px;
-  z-index: 1000; }
+  z-index: 100; }
   .sidebar-container .sidemenu {
     background-color: #EBEBEB;
     display: block;
@@ -88,15 +88,19 @@
   margin-left: 300px;
   min-width: 675px; }
   .right-container .project-info .home-menu {
-    display: flex;
+    display: inline-block;
     float: left;
     height: 100%;
     margin-top: 20px;
     margin-left: 20px;
     margin-right: 40%; }
-    .right-container .project-info .home-menu a {
+    .right-container .project-info .home-menu a, .right-container .project-info .home-menu p {
+      margin: 0;
+      cursor: pointer;
       text-decoration: none;
       color: black; }
+      .right-container .project-info .home-menu a:hover, .right-container .project-info .home-menu p:hover {
+        color: #404040; }
   .right-container .project-info .project-image {
     display: inline-block; }
   .right-container .cards-assigned {
@@ -177,7 +181,7 @@ card-two-sided {
         margin: 0 2px 0 0; }
       card-two-sided > card-front .card-foot .poc {
         float: left; }
-      card-two-sided > card-front .card-foot .id {
+      card-two-sided > card-front .card-foot .index {
         float: right; }
   card-two-sided > card-back {
     color: black;
@@ -219,7 +223,7 @@ card-two-sided {
         margin: 0 2px 0 0; }
       card-two-sided > card-back .card-foot .poc {
         float: left; }
-      card-two-sided > card-back .card-foot .id {
+      card-two-sided > card-back .card-foot .index {
         float: right; }
 
 /* Front visible */
@@ -305,28 +309,28 @@ card-two-sided.card-back > card-back {
 .standard-header {
   border-bottom: solid #E1A641; }
 
-.details-foot .step-header {
+.details-foot .steps .step-header {
   display: inline-block;
   margin-bottom: 5px;
   margin-top: 40px; }
-  .details-foot .step-header .steps-label {
+  .details-foot .steps .step-header .steps-label {
     float: left;
     margin: 0;
     margin-right: 10px; }
-  .details-foot .step-header .remove-step {
+  .details-foot .steps .step-header .remove-step {
     color: #BFBFBF;
     float: right;
     margin-top: 8px;
     cursor: pointer; }
-    .details-foot .step-header .remove-step:hover {
+    .details-foot .steps .step-header .remove-step:hover {
       color: #DB2929; }
-  .details-foot .step-header .add-step {
+  .details-foot .steps .step-header .add-step {
     color: #BFBFBF;
     float: right;
     margin-top: 8px;
     margin-right: 10px;
     cursor: pointer; }
-    .details-foot .step-header .add-step:hover {
+    .details-foot .steps .step-header .add-step:hover {
       color: #54C747; }
 .details-foot table {
   border: 1px solid #D5D5D5; }
@@ -388,12 +392,26 @@ card-two-sided.card-back > card-back {
     .sprint .sprint-header .sprint-points {
       margin: 12px 0 0 0;
       float: right; }
-  .sprint .section-title {
-    width: 100%; }
-    .sprint .section-title h2 {
-      border-bottom: 1px solid #D5D5D5;
-      margin: 0;
-      width: 100%; }
+  .sprint .sprint-section {
+    display: inline-block; }
+    .sprint .sprint-section h2 {
+      float: left;
+      margin: 0; }
+    .sprint .sprint-section .remove-from-sprint {
+      color: #BFBFBF;
+      float: right;
+      margin-top: 8px;
+      cursor: pointer; }
+      .sprint .sprint-section .remove-from-sprint:hover {
+        color: #DB2929; }
+    .sprint .sprint-section .add-to-sprint {
+      color: #BFBFBF;
+      float: right;
+      margin-top: 8px;
+      margin-right: 10px;
+      cursor: pointer; }
+      .sprint .sprint-section .add-to-sprint:hover {
+        color: #54C747; }
   .sprint .card-container {
     display: inline-block;
     margin-bottom: 50px;
@@ -434,7 +452,7 @@ card-two-sided.card-back > card-back {
     .discussion-comment .comment-header p {
       margin: 0;
       padding: 0; }
-    .discussion-comment .comment-header .comment-card-id {
+    .discussion-comment .comment-header .comment-card-index {
       float: right; }
     .discussion-comment .comment-header .comment-card-name {
       float: left; }
@@ -446,6 +464,47 @@ card-two-sided.card-back > card-back {
   .discussion-comment .comment-body .comment-message {
     padding: 0 8px;
     font-size: 13px; }
+
+.prompt {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 200; }
+  .prompt .prompt-input {
+    padding: 20px;
+    margin: 150px auto;
+    background-color: white;
+    border: solid black; }
+
+.open-sprint {
+  width: 400px; }
+  .open-sprint .new-sprint-label {
+    margin-top: 0; }
+  .open-sprint .dates {
+    display: inline-block; }
+    .open-sprint .dates .start-date {
+      float: left;
+      margin-right: 50px; }
+    .open-sprint .dates .end-date {
+      float: right; }
+  .open-sprint .label-value {
+    margin: 0 0 10px 0; }
+    .open-sprint .label-value label {
+      margin-right: 3px;
+      font-weight: bold; }
+    .open-sprint .label-value p {
+      margin: 0;
+      display: inline-block; }
+
+.add-card-area {
+  width: 300px; }
+  .add-card-area .add-card-label {
+    margin: 0; }
+  .add-card-area button, .add-card-area div {
+    margin-top: 10px; }
 
 body {
   overflow-x: auto;

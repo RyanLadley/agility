@@ -1,4 +1,4 @@
-<a href = "/card/{{card.id}}">
+<a href = "/card/{{card.index}}">
     <card-two-sided class = "card-two-sided {{front ? 'card-front' : 'card-back'}} " ng-mouseover = "front = false" ng-mouseleave = "front = true">
 
         <card-front>
@@ -6,13 +6,13 @@
                 <h3 class = "name"> {{card.name}}</h3>
             </div>
             <div class = card-center>
-                <p class = "epic" style = "color: {{card.epic.foreColor}}; background-color: {{card.epic.backColor}};">{{card.epic.name}}</p>
+                <p class = "epic" style = "color: {{card.epic.foreground_color}}; background-color: {{card.epic.background_color}};">{{card.epic.name}}</p>
                 <p class = "points"> Points: {{card.points}}</p>
                 <p class = "status status-{{card.status}}">{{card.status}}</p>
             </div>
             <div class = "card-foot">
                 <p class = "poc"> {{card.poc}}</p>
-                <p class = "id">{{card.id}}</p>
+                <p class = "index">{{card.index}}</p>
             </div>
         </card-front>
 
@@ -21,10 +21,10 @@
                 <h3 class = "name"> {{card.name}}</h3>
                 <p class = "points"> Points: {{card.points}}</p>
             </div>
-            <p class = "description">{{card.description}}</p>
+            <p class = "description">{{card.description| limitTo:340}}{{card.description.length > 340 ? '...' : ''}}</p>
             <div class = "card-foot">
                 <p class = "poc"> {{card.poc}}</p>
-                <p class = "id">{{card.id}}</p>
+                <p class = "index">{{card.index}}</p>
             </div>
         </card-back>
         
