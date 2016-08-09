@@ -40,7 +40,7 @@ app.controller('sidebarController', function($scope, $location){
         if(path === "/"){
             $scope.icons.home = true;
         }
-        else if(path === "/list/epic"){
+        else if(path === "/list/epics"){
             $scope.icons.epic = true;
         }
         else if(path ==="/list/sprint/current"){

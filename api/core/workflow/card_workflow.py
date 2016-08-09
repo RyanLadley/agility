@@ -1,10 +1,15 @@
 from api.core.workflow import workflow
 from flask import request
 
+import api.DAL.data_context.cards.card_update as card_update
 import api.DAL.data_context.cards.card_insert as card_insert
 import api.DAL.data_context.cards.card_select as card_select
 
-from api.core.cards.standard_card import StandardCard
+from api.core.enum.card_type import CardType
+
+from api.core.cards.card import Card
+from api.core.cards.card import Step
+
 import api.core.response as response
 import api.core.sanitize as sanitize
 
@@ -15,11 +20,14 @@ import json
 def create_card():
     card_form = json.loads(request.form['payload'])
     card_form = sanitize.form_keys(card_form)
-    print(card_form)
-    stand_card = StandardCard.map_from_form(card_form)
 
+    card = Card.map_from_form(card_form)
+    
+    steps_form = card_form.get('steps')
+    steps = create_objects_from_form_array(Step, steps_form)
+    card.add_steps(steps)
 
-    return card_insert.new_standard_card(stand_card)
+    return card_insert.new_card(card)
 
 
 @workflow.route('/get/cards/user', methods = ['POST'])
@@ -28,25 +36,55 @@ def get_card_with_user_task(id, api_response = True):
     user_json = '{"id" : "1", "name": "Ryan"}'
     user = json.loads(user_json)
 
-    cards = card_select.standard_card_with_user_task(user['id'])
+    cards = card_select.card_with_user_task(user['id'])
 
-    serialized_cards = serialize_card_array(cards)
+    serialized_cards = serialize_array(cards)
 
     if api_response:
         return response.success(serialized_cards)
     else:
         return serialized_cards
-   
     
 
 
-@workflow.route("/get/card/standard/<card_index>", methods = ['POST'])
-def get_card_details(card_index):
+@workflow.route("/get/card/<card_index>", methods = ['POST'])
+def get_card(card_index):
 
-    stand_card = StandardCard()
-    stand_card.index = card_index
+    card_refrence = Card()
+    card_refrence.index = card_index
 
-    card = card_select.standard_card_details(stand_card.proj_designator(), stand_card.proj_number())
+    card = card_select.card(card_refrence.proj_designator(), card_refrence.proj_number())
+
+    if card.type is CardType(0).name:
+        steps = card_select.card_steps(card.id)
+        card.add_steps(steps)
+
+    elif card.type is CardType(1).name:
+        assigned_cards = card_select.cards_assigned_to_epic(card.epic.id)
+        card.add_assigned_cards(assigned_cards)
+
+    return response.success(card.serialize())
+
+@workflow.route("/get/card/name/<card_id>", methods = ['POST'])
+def get_card_name(card_id):
+
+    card = card_select.card_name(card_id)
+    print(card)
+    return response.success(card.serialize())
+
+
+@workflow.route("/get/card/details/<card_id>", methods = ['POST'])
+def get_card_details(card_id):
+
+    card = card_select.card_details(card_id)
+
+    return response.success(card.serialize())
+
+
+@workflow.route("/get/card/description/<card_id>", methods = ['POST'])
+def get_card_description(card_id):
+
+    card = card_select.card_description(card_id)
 
     return response.success(card.serialize())
 
@@ -56,20 +94,95 @@ def get_backlog():
 
     backlog = card_select.backlog()
 
-    serialized_backlog = serialize_card_array(backlog)
+    serialized_backlog = serialize_array(backlog)
     
     return response.success(serialized_backlog)
 
 
-def serialize_card_array(cards):
+@workflow.route("/card/<card_id>/update/name", methods = ['POST'])
+def update_card_name(card_id):
 
-    serialized_cards = []
-    for card in cards:
-        serialized_cards.append(card.serialize())
+    card_form = json.loads(request.form['payload'])
+    card_form = sanitize.form_keys(card_form)
 
-    return serialized_cards
+    card = Card.map_from_form(card_form)
 
-    
+    card_update.name(card)
+
+    return get_card_name(card.id)
+
+
+@workflow.route("/card/<card_id>/update/description", methods = ['POST'])
+def update_card_description(card_id):
+
+    card_form = json.loads(request.form['payload'])
+    card_form = sanitize.form_keys(card_form)
+
+    card = Card.map_from_form(card_form)
+
+    card_update.description(card)
+
+    return get_card_description(card.id)
+
+
+@workflow.route("/card/<card_id>/update/details", methods = ['POST'])
+def update_card_details(card_id):
+
+    card_form = json.loads(request.form['payload'])
+    card_form = sanitize.form_keys(card_form)
+
+    card = Card.map_from_form(card_form)
+
+    card_update.details(card)
+
+    return get_card_details(card.id)
+
+
+@workflow.route("/card/<card_id>/update/steps", methods = ['POST'])
+def update_card_steps(card_id):
+
+    steps_form = json.loads(request.form['payload'])
+
+    steps = create_objects_from_form_array(Step, steps_form) 
+
+    updated_steps = []
+    new_steps = []
+
+    for step in steps:
+        if step.id > 0:
+            updated_steps.append(step)
+        else:
+            new_steps.append(step)
+
+    card_update.steps(updated_steps)
+    card_insert.steps_for(card_id, new_steps)
+
+    steps = card_select.card_steps(card_id)
+
+    return response.success(serialize_array(steps))
+
+
+def serialize_array(array):
+
+    serialized_array = []
+    for item in array:
+        serialized_array.append(item.serialize())
+
+    return serialized_array
+
+
+def create_objects_from_form_array(Class, form):
+
+    array = []
+    try:
+        for item in form:
+            item = sanitize.form_keys(item)
+            array.append(Class.map_from_form(item))
+
+    except TypeError:
+        pass
+
+    return array
 
 
 

@@ -143,9 +143,7 @@ card-two-sided {
     transform: perspective(800px) rotateY(0);
     position: relative; }
     card-two-sided > card-front .card-head {
-      border-bottom: solid;
       margin-bottom: 5px;
-      border-color: #E1A641;
       width: 100%;
       height: 75px;
       position: relative; }
@@ -158,13 +156,6 @@ card-two-sided {
         margin: 0; }
     card-two-sided > card-front .card-center {
       text-align: center; }
-      card-two-sided > card-front .card-center .epic {
-        margin: 0;
-        display: inline-block;
-        border: 1px solid black;
-        border-radius: 3px;
-        padding-left: 6px;
-        padding-right: 6px; }
       card-two-sided > card-front .card-center .points {
         margin: 0;
         width: 100%;
@@ -204,8 +195,6 @@ card-two-sided {
     transform: perspective(800px) rotateY(180deg); }
     card-two-sided > card-back .card-head {
       display: inline-block;
-      border-bottom: solid;
-      border-color: #E1A641;
       width: 100%; }
       card-two-sided > card-back .card-head .name {
         float: left;
@@ -259,14 +248,52 @@ card-two-sided.card-back > card-back {
   margin-left: 50px;
   margin-right: 50px;
   min-width: 1200px; }
+  .details-page textarea {
+    width: 100%;
+    height: 320px; }
+  .details-page input.card-name {
+    float: left;
+    margin-right: 5px;
+    font-weight: bold;
+    font-size: 25px;
+    width: 25%; }
 
 .details-header {
   width: 100%;
-  display: inline-block; }
+  display: inline-block;
+  margin-top: 10px; }
+  .details-header .edit-icon {
+    color: #BFBFBF;
+    cursor: pointer;
+    margin-left: 5px;
+    position: absolute;
+    top: -9999px !important;
+    left: -9999px !important; }
+  .details-header .edit-icon-toggle:hover {
+    color: black; }
+  .details-header .edit-icon-confirm:hover {
+    color: #54C747; }
+  .details-header .edit-icon-cancel:hover {
+    color: #DB2929; }
+  .details-header:hover .edit-icon {
+    position: static;
+    margin-top: 2px; }
+  .details-header:hover .edit-icon {
+    float: left; }
+  .details-header:hover .edit-icon-confirm, .details-header:hover .edit-icon-cancel {
+    float: right; }
   .details-header h1 {
     float: left;
+    margin-top: 0;
     margin-right: 20px;
     margin-bottom: 0; }
+
+.details-label {
+  display: inline-block;
+  margin-bottom: 5px; }
+  .details-label h2, .details-label h3 {
+    float: left;
+    margin: 0; }
 
 .details-body {
   height: 400px;
@@ -280,6 +307,26 @@ card-two-sided.card-back > card-back {
     width: 70%;
     padding-right: 50px;
     border-right: 1px solid #D5D5D5; }
+    .details-body .details-left .edit-icon {
+      color: #BFBFBF;
+      cursor: pointer;
+      margin-left: 5px;
+      position: absolute;
+      top: -9999px !important;
+      left: -9999px !important; }
+    .details-body .details-left .edit-icon-toggle:hover {
+      color: black; }
+    .details-body .details-left .edit-icon-confirm:hover {
+      color: #54C747; }
+    .details-body .details-left .edit-icon-cancel:hover {
+      color: #DB2929; }
+    .details-body .details-left:hover .edit-icon {
+      position: static;
+      margin-top: 2px; }
+    .details-body .details-left:hover .edit-icon {
+      float: left; }
+    .details-body .details-left:hover .edit-icon-confirm, .details-body .details-left:hover .edit-icon-cancel {
+      float: right; }
     .details-body .details-left .card-description {
       max-height: 95%; }
   .details-body .details-right {
@@ -290,15 +337,35 @@ card-two-sided.card-back > card-back {
     min-width: 200px;
     padding-left: 20px;
     margin: 10px 0 0 0; }
-    .details-body .details-right .card-epic {
-      margin: 0;
+    .details-body .details-right .edit-icon {
+      color: #BFBFBF;
+      cursor: pointer;
+      margin-left: 5px;
+      position: absolute;
+      top: -9999px !important;
+      left: -9999px !important; }
+    .details-body .details-right .edit-icon-toggle:hover {
+      color: black; }
+    .details-body .details-right .edit-icon-confirm:hover {
+      color: #54C747; }
+    .details-body .details-right .edit-icon-cancel:hover {
+      color: #DB2929; }
+    .details-body .details-right:hover .edit-icon {
+      position: static;
+      margin-top: 2px; }
+    .details-body .details-right:hover .edit-icon {
+      float: left; }
+    .details-body .details-right:hover .edit-icon-confirm, .details-body .details-right:hover .edit-icon-cancel {
+      float: right; }
+    .details-body .details-right .details-label {
       display: inline-block;
-      border: 1px solid black;
-      border-radius: 3px;
-      padding-left: 6px;
-      padding-right: 6px; }
+      margin-bottom: 5px; }
+      .details-body .details-right .details-label h3 {
+        float: left;
+        margin: 0; }
     .details-body .details-right .label-value {
-      margin: 0 0 10px 0; }
+      margin: 0 0 10px 0;
+      position: relative; }
       .details-body .details-right .label-value label {
         margin-right: 3px;
         font-weight: bold; }
@@ -309,6 +376,26 @@ card-two-sided.card-back > card-back {
 .standard-header {
   border-bottom: solid #E1A641; }
 
+.details-foot .edit-icon {
+  color: #BFBFBF;
+  cursor: pointer;
+  margin-left: 5px;
+  position: absolute;
+  top: -9999px !important;
+  left: -9999px !important; }
+.details-foot .edit-icon-toggle:hover {
+  color: black; }
+.details-foot .edit-icon-confirm:hover {
+  color: #54C747; }
+.details-foot .edit-icon-cancel:hover {
+  color: #DB2929; }
+.details-foot:hover .edit-icon {
+  position: static;
+  margin-top: 2px; }
+.details-foot:hover .edit-icon {
+  float: left; }
+.details-foot:hover .edit-icon-confirm, .details-foot:hover .edit-icon-cancel {
+  float: right; }
 .details-foot .steps .step-header {
   display: inline-block;
   margin-bottom: 5px;
@@ -317,28 +404,21 @@ card-two-sided.card-back > card-back {
     float: left;
     margin: 0;
     margin-right: 10px; }
-  .details-foot .steps .step-header .remove-step {
-    color: #BFBFBF;
-    float: right;
-    margin-top: 8px;
-    cursor: pointer; }
-    .details-foot .steps .step-header .remove-step:hover {
-      color: #DB2929; }
-  .details-foot .steps .step-header .add-step {
-    color: #BFBFBF;
-    float: right;
-    margin-top: 8px;
-    margin-right: 10px;
-    cursor: pointer; }
-    .details-foot .steps .step-header .add-step:hover {
-      color: #54C747; }
-.details-foot table {
-  border: 1px solid #D5D5D5; }
+.details-foot table .step-task {
+  width: 70%; }
 .details-foot tr:nth-child(even) {
   background-color: #F7F7F7; }
 .details-foot .table-header {
   text-align: left;
   background-color: #C6C6C6; }
+.details-foot .card-container {
+  display: inline-block;
+  margin-bottom: 50px;
+  width: 100%; }
+  .details-foot .card-container .assigned-card {
+    float: left;
+    margin-right: 1%;
+    margin-bottom: 10px; }
 
 .create-card-page {
   margin-top: 20px;
@@ -351,7 +431,6 @@ card-two-sided.card-back > card-back {
     border-radius: 3px;
     padding: 5px;
     margin: 0;
-    margin-top: 20px;
     cursor: pointer; }
     .create-card-page .create-card i {
       color: green; }
@@ -364,7 +443,6 @@ card-two-sided.card-back > card-back {
     height: 320px; }
   .create-card-page input.card-name {
     float: left;
-    margin-top: 15px;
     margin-right: 5px;
     font-weight: bold;
     font-size: 25px;
@@ -374,29 +452,43 @@ card-two-sided.card-back > card-back {
   .create-card-page table input {
     width: 99%; }
 
+.set-steps-panel .remove-step, .set-steps-panel .add-step {
+  color: #BFBFBF;
+  float: right;
+  margin-top: 8px;
+  cursor: pointer; }
+  .set-steps-panel .remove-step:hover, .set-steps-panel .add-step:hover {
+    color: #DB2929; }
+.set-steps-panel .add-step {
+  margin-right: 10px; }
+  .set-steps-panel .add-step:hover {
+    margin-top: 8px;
+    color: #54C747; }
+.set-steps-panel input.card-name {
+  float: left;
+  margin-top: 15px;
+  margin-right: 5px;
+  font-weight: bold;
+  font-size: 25px;
+  width: 25%; }
+.set-steps-panel table .step-task {
+  width: 70%; }
+.set-steps-panel table input {
+  width: 99%; }
+
 .sprint {
   margin: 3%;
   min-width: 750px; }
-  .sprint .sprint-header {
-    border-bottom: 2px solid black;
-    margin-bottom: 50px;
-    width: 100%;
-    display: inline-block;
-    position: relative; }
-    .sprint .sprint-header .sprint-title {
-      float: left;
-      margin: 0 10px 0 0; }
-    .sprint .sprint-header .sprint-timeframe {
-      float: left;
-      margin: 12px 0 0 0; }
-    .sprint .sprint-header .sprint-points {
-      margin: 12px 0 0 0;
-      float: right; }
+  .sprint .sprint-header .sprint-timeframe {
+    float: left;
+    margin: 12px 0 0 0; }
+  .sprint .sprint-header .sprint-points {
+    margin: 12px 0 0 0;
+    float: right; }
   .sprint .sprint-section {
     display: inline-block; }
-    .sprint .sprint-section h2 {
-      float: left;
-      margin: 0; }
+    .sprint .sprint-section .sprint-section-title {
+      float: left; }
     .sprint .sprint-section .remove-from-sprint {
       color: #BFBFBF;
       float: right;
@@ -506,6 +598,26 @@ card-two-sided.card-back > card-back {
   .add-card-area button, .add-card-area div {
     margin-top: 10px; }
 
+.epic-listing-page {
+  margin: 3%;
+  min-width: 750px; }
+  .epic-listing-page .card-container {
+    display: inline-block;
+    margin-bottom: 50px;
+    width: 100%; }
+    .epic-listing-page .card-container .epic-card {
+      float: left;
+      margin-right: 1%;
+      margin-bottom: 10px; }
+
+.backlog-page {
+  margin: 3%;
+  min-width: 750px; }
+  .backlog-page .backlog-header {
+    display: inline-block; }
+  .backlog-page .backlog-row {
+    cursor: pointer; }
+
 body {
   overflow-x: auto;
   margin: 0;
@@ -514,5 +626,33 @@ body {
 .section-label {
   width: 100%;
   border-bottom: 1px solid #D5D5D5; }
+  .section-label .section-title {
+    margin: 0; }
+
+.listing-header {
+  border-bottom: 2px solid black;
+  margin-bottom: 50px;
+  width: 100%;
+  display: inline-block;
+  position: relative; }
+  .listing-header .listing-title {
+    float: left;
+    margin: 0 10px 0 0; }
+
+.Standard-card-header {
+  border-bottom: solid #E1A641; }
+
+.Epic-card-header {
+  border-bottom: solid #8D00B7; }
+
+table {
+  border: 1px solid #D5D5D5; }
+
+tr:nth-child(even) {
+  background-color: #F7F7F7; }
+
+.table-header {
+  text-align: left;
+  background-color: #C6C6C6; }
 
 /*# sourceMappingURL=workspace.css.map */

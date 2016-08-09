@@ -2,14 +2,14 @@
 class User:
 
     @staticmethod
-    def map_from_row(row):
+    def map_from_form(form):
 
         user = User()
 
-        user.id = row['id']
+        user.id = form.get('user_id')
 
-        user.first_name = row['first_name']
-        user.last_name = row['last_name']
+        user.first_name = form.get('user_first_name')
+        user.last_name = form.get('user_last_name')
 
 
         return user

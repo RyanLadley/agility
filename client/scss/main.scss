@@ -3,12 +3,15 @@
 @import "card";
 @import "card-details";
 @import "create-card";
+@import "set-steps-panel";
 @import "sprint";
 @import "project-image";
 @import "discussion-board";
 @import "prompt";
 @import "open-sprint";
 @import "add-card-to-sprint";
+@import "epic-listing";
+@import "backlog";
 
 
 body{
@@ -20,4 +23,44 @@ body{
 .section-label{
     width: 100%;
     border-bottom: 1px solid $section-divide-color;
+
+    .section-title{
+        margin:0;
+    }
+
+}
+
+.listing-header{
+    border-bottom: 2px solid black;
+    margin-bottom: 50px;
+    width: 100%;
+    display: inline-block;
+    position: relative;
+
+
+    .listing-title{
+        float: left;
+        margin: 0 10px 0 0;
+    }
+}
+
+.Standard-card-header{
+    border-bottom: solid $standard-orange;
+}
+
+.Epic-card-header{
+    border-bottom: solid $epic-purple;
+}
+
+table{
+    border: 1px solid $section-divide-color;
+}
+
+tr:nth-child(even) {
+    background-color: #F7F7F7;
+}
+
+.table-header{
+    text-align: left;
+    background-color: #C6C6C6;
 }

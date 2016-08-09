@@ -3,38 +3,49 @@ app.controller('createCardController', function($scope, postRequestService){
     {
         cardIndex: "",
         cardName: "",
-        cardType: "", //TODO Create Drop down
+        cardType: "",
         cardCreated: new Date(),
         cardUpdated: new Date(),
         cardPoints: "",
-        cardPoc: "",
-        cardStatus: "Open", //TODO Create Drop Down
+        userId: 0,
+        cardStatus: "Open",
         cardDescription: "",
-        epicName: "Build App", 
-        epicBackgroundColor : "#5A8A5C", 
-        epicForegroundColor : "#FFFFFF", //TODO Create Drop down
+        epicId: "",
         steps: []
     }
 
+    //Keep Track of the new cards epic for dispaly purposes
+    $scope.epic = {
+        id: 0
+    }
+    $scope.$watch($scope.epic, function(){
+        $scope.newCard.epicId = $scope.epic.id
+    });
 
-    postRequestService.request('/api/page/create/standard', $scope.newCard).then(function(success){
-            console.log(success.data.response)
-            $scope.newCard.cardIndex = success.data.response.card_index;
-            $scope.statuses = success.data.response.statuses;
+    $scope.epics = [{id :0 , name: "None"}]
+    postRequestService.request('/api/page/create/card', $scope.newCard).then(function(request){
+            $scope.newCard.cardIndex = request.data.response.card_index;
+            $scope.statuses = request.data.response.statuses;
 
             unassigned = [{'id' : 0 ,'first_name' : 'Unassigned'}]
-            $scope.users = unassigned.concat(success.data.response.users);
-
+            $scope.users = unassigned.concat(request.data.response.users);
             $scope.newCard.cardPoc = 0;
+
+            
+            $scope.epics = request.data.response.epics
     });
     
     $scope.addStep = function(){
-        $scope.newCard.steps.push({task: "",  assigned: "Not Assigned", status: "Open"});
+        if (!($scope.newCard.steps)){
+            $scope.newCard.steps = []
+        }
+
+        $scope.newCard.steps.push({task: "",  assigned: 0, status: "Open"});
     }
 
     $scope.createCard = function(){
         console.log("Fired");
-        postRequestService.request('/api/create/card', $scope.newCard).then(function(response){
+        postRequestService.request('/api/create/card', $scope.newCard).then(function(request){
             console.log("Create Card: You Probably Want to do something here");
         });
     }

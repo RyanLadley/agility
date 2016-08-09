@@ -1,0 +1,14 @@
+@import "mixin";
+
+.backlog-page{
+    margin: 3%;
+    min-width: 750px;
+
+    .backlog-header{
+        display: inline-block;
+    }
+
+    .backlog-row{
+        cursor: pointer;
+    }
+}

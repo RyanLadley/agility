@@ -12,11 +12,52 @@
 	text-shadow: -1px 0 $color,0 1px $color,1px 0 $color,0 -1px $color;
 }
 
-@mixin epic-label(){
-    margin: 0;
-    display: inline-block;
-    border: 1px solid black;
-    border-radius: 3px;
-    padding-left: 6px;
-    padding-right: 6px;
+@mixin edit-icon{
+    .edit-icon{
+        color: $action-icon-grey;
+        cursor: pointer;
+        margin-left: 5px;
+        //Hides element while keeping it on the dom (for automation and such)
+        position: absolute;
+        top: -9999px !important;
+        left: -9999px !important;
+
+    }
+
+    //Hover over edit icon
+    .edit-icon-toggle{
+        &:hover{
+            color:black;
+        }
+    }
+
+    //Hover over confrim icon
+    .edit-icon-confirm{
+        &:hover{
+            color: $add-green;
+        }
+    }
+
+    //hover over cancel icon
+    .edit-icon-cancel{
+        &:hover{
+            color: $remove-red;
+        }
+    }
+
+    //Hover Over Parent
+    &:hover {
+        .edit-icon{
+            position: static;
+            margin-top: 2px;
+        }
+
+        .edit-icon{
+            float:left
+        }
+        .edit-icon-confirm, .edit-icon-cancel{
+            float:right;
+        }
+
+    }
 }

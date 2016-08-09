@@ -1,0 +1,22 @@
+<div class = "epic-listing-page">
+    <div class = "epic-header listing-header">
+        <h1 class = "epic-title listing-title" >Epic Listing</h1>
+    </div>
+    <div class = "section-label epic-listing-section">
+        <h2 class = "section-title">Active</h2>
+    </div>
+    <div class = card-container>
+        <div ng-repeat = 'card in epicCards'>
+            <card  class = "epic-card" card = 'card' ></card>
+        </div>
+    </div>
+    <div class = "section-label epic-listing-section">
+        <h2 class = "section-title"> Completed</h2>
+    </div>
+    <div class = card-container>
+        <div ng-repeat = 'card in cards'>
+            <card class = "epic-card" card = 'card' ></card>
+        </div>
+    </div>
+</div>
+

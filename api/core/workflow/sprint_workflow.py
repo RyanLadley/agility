@@ -10,7 +10,7 @@ import api.DAL.data_context.cards.card_update as card_update
 
 
 from api.core.sprint.sprint import Sprint
-from api.core.cards.standard_card import StandardCard
+from api.core.cards.card import Card
 
 import api.core.response as response
 

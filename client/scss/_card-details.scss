@@ -5,15 +5,41 @@
     margin-left: 50px;
     margin-right: 50px;
     min-width: 1200px; 
+
+
+    textarea{
+        width:100%;
+        height: 320px;
+    }
+
+    input.card-name{
+        float: left;
+        margin-right: 5px;
+        font-weight: bold;
+        font-size: 25px;
+        width: 25%;
+    }
 }
 .details-header{
     width: 100%;
     display:inline-block;
+    margin-top: 10px;
     
+    @include edit-icon;
     h1{
         float:left;
+        margin-top: 0;
         margin-right: 20px;
         margin-bottom: 0;
+    }
+}
+
+.details-label{
+    display: inline-block;
+    margin-bottom: 5px;
+    h2, h3{
+        float:left;
+        margin: 0;
     }
 }
 
@@ -31,6 +57,9 @@
         padding-right: 50px;
         border-right: 1px solid $section-divide-color;
 
+        @include edit-icon;
+
+
         .card-description{
             max-height: 95%;
         }
@@ -46,12 +75,21 @@
         padding-left: 20px;
         margin: 10px 0 0 0 ;
 
-        .card-epic{
-            @include epic-label();
+        @include edit-icon;
+
+        .details-label{
+            display: inline-block;
+            margin-bottom: 5px;
+            h3{
+                float:left;
+                margin: 0;
+            }
         }
+
 
         .label-value{
             margin: 0 0 10px 0;
+            position: relative;
 
             label{
                 margin-right: 3px;
@@ -68,10 +106,11 @@
 }
 
 .standard-header{
-    border-bottom: solid $main-orange;
+    border-bottom: solid $standard-orange;
 }
 
 .details-foot{
+    @include edit-icon;
     .steps{
         .step-header{
             display: inline-block;
@@ -82,35 +121,14 @@
                 margin: 0;
                 margin-right: 10px;
             }
+        }
 
-
-            .remove-step{
-                color: $action-icon-grey;
-                float: right;
-                margin-top: 8px;
-                cursor: pointer;
-
-                &:hover{
-                    color: $remove-red;
-                }
-            }
-
-            .add-step{
-                color: $action-icon-grey;
-                float: right;
-                margin-top: 8px;
-                margin-right: 10px;
-                cursor: pointer;
-
-                &:hover{
-                    color: $add-green;
-                }
-            }
-        } 
     }
 
     table{
-        border: 1px solid $section-divide-color;
+        .step-task{
+            width: 70%;
+        }
     }
 
     tr:nth-child(even) {
@@ -120,6 +138,19 @@
     .table-header{
         text-align: left;
         background-color: #C6C6C6;
+    }
+
+    .card-container{
+        display: inline-block;
+        margin-bottom: 50px;
+        width: 100%;
+
+        .assigned-card{
+            float:left;
+            margin-right: 1%;
+            margin-bottom: 10px;
+        }
+
     }
 }
 

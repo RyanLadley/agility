@@ -24,25 +24,24 @@ DROP TABLE IF EXISTS `card`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `card` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `proj_designator` int(10) unsigned NOT NULL,
-  `number` int(5) unsigned NOT NULL,
+  `proj_designator` char(3) NOT NULL,
+  `proj_number` int(5) unsigned NOT NULL,
   `name` varchar(45) NOT NULL,
-  `description` int(10) unsigned NOT NULL,
   `type` int(10) unsigned NOT NULL,
+  `epic` int(10) unsigned DEFAULT NULL,
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL,
   `status` int(10) unsigned NOT NULL,
+  `poc` int(10) unsigned DEFAULT NULL,
+  `points` int(11) DEFAULT NULL,
+  `sprint` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
-  KEY `fk_card_1_idx` (`description`),
-  KEY `fk_type_idx` (`type`),
   KEY `fk_status_idx` (`status`),
   KEY `fk_designator_idx` (`proj_designator`),
-  CONSTRAINT `fk_description` FOREIGN KEY (`description`) REFERENCES `card_description` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_status` FOREIGN KEY (`status`) REFERENCES `card_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_type` FOREIGN KEY (`type`) REFERENCES `card_types` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_designator` FOREIGN KEY (`proj_designator`) REFERENCES `proj_designator` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `fk_epic_idx` (`epic`),
+  CONSTRAINT `fk_epic` FOREIGN KEY (`epic`) REFERENCES `epic` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -54,23 +53,13 @@ DROP TABLE IF EXISTS `card_description`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `card_description` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `description` blob,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `card_status`
---
-
-DROP TABLE IF EXISTS `card_status`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `card_status` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `status` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `card_id` int(10) unsigned DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `card_id_UNIQUE` (`card_id`),
+  CONSTRAINT `fk_card_description` FOREIGN KEY (`card_id`) REFERENCES `card` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -82,80 +71,73 @@ DROP TABLE IF EXISTS `card_steps`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `card_steps` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `step` varchar(1024) DEFAULT NULL,
-  `assigned_to` varchar(256) DEFAULT NULL,
+  `card_id` int(10) unsigned DEFAULT NULL,
+  `task` varchar(1024) DEFAULT NULL,
+  `assigned` varchar(256) DEFAULT NULL,
   `status` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `fk_step_status_idx` (`status`),
-  CONSTRAINT `fk_step_status` FOREIGN KEY (`status`) REFERENCES `card_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `fk_card_steps_idx` (`card_id`),
+  CONSTRAINT `fk_card_steps` FOREIGN KEY (`card_id`) REFERENCES `card` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `card_type_epic`
+-- Table structure for table `epic`
 --
 
-DROP TABLE IF EXISTS `card_type_epic`;
+DROP TABLE IF EXISTS `epic`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `card_type_epic` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `background-color` varchar(45) DEFAULT NULL,
-  `foreground-color` varchar(45) DEFAULT NULL,
+CREATE TABLE `epic` (
+  `id` int(10) unsigned NOT NULL,
+  `background_color` varchar(45) DEFAULT NULL,
+  `foreground_color` varchar(45) DEFAULT NULL,
+  `card_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `card_type_standard`
+-- Table structure for table `sprint`
 --
 
-DROP TABLE IF EXISTS `card_type_standard`;
+DROP TABLE IF EXISTS `sprint`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `card_type_standard` (
+CREATE TABLE `sprint` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `card` int(10) unsigned NOT NULL,
-  `steps` int(10) unsigned DEFAULT NULL,
-  `assigned_epic` int(10) unsigned DEFAULT NULL,
-  `sprint` int(10) unsigned DEFAULT NULL,
+  `name` varchar(256) NOT NULL,
+  `start_date` datetime DEFAULT NULL,
+  `end_date` datetime DEFAULT NULL,
+  `open` tinyint(1) NOT NULL,
+  `closed_date` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(254) DEFAULT NULL,
+  `username` varchar(20) DEFAULT NULL,
+  `first_name` varchar(45) DEFAULT NULL,
+  `last_name` varchar(45) DEFAULT NULL,
+  `password` varchar(160) DEFAULT NULL,
+  `token` varchar(45) DEFAULT NULL,
+  `token_exp` datetime DEFAULT NULL,
+  `permissions` tinyint(3) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `idcard_standard_UNIQUE` (`id`),
-  UNIQUE KEY `card_UNIQUE` (`card`),
-  KEY `fk_epic_idx` (`assigned_epic`),
-  CONSTRAINT `fk_epic` FOREIGN KEY (`assigned_epic`) REFERENCES `card_type_epic` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_card` FOREIGN KEY (`card`) REFERENCES `card` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `card_types`
---
-
-DROP TABLE IF EXISTS `card_types`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `card_types` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `proj_designator`
---
-
-DROP TABLE IF EXISTS `proj_designator`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `proj_designator` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `designator` char(4) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -167,4 +149,4 @@ CREATE TABLE `proj_designator` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-08-02 19:00:40
+-- Dump completed on 2016-08-09 15:32:38

@@ -1,7 +1,7 @@
 {
-  "host": "replace_me",
-  "user": "replace_me",
-  "password": "replace_me",
-  "database": "replace_me",
-  "port" : "replace_me"
+  "host": "REPLACE_ME",
+  "user": "REPLACE_ME",
+  "password": "REPLACE_ME",
+  "database": "REPLACE_ME",
+  "port" : "REPLACE_ME"
 }

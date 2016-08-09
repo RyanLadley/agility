@@ -19,6 +19,7 @@ application.register_blueprint(page, url_prefix='/api/page')
 
 from api.core.workflow import workflow
 import api.core.workflow.card_workflow
+import api.core.workflow.epic_workflow
 import api.core.workflow.sprint_workflow
 
 application.register_blueprint(workflow, url_prefix='/api')

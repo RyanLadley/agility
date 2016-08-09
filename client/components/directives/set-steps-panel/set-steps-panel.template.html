@@ -1,0 +1,25 @@
+<div class = "set-steps-panel">
+    <table style="width:100%">
+        <tr class = "table-header">
+            <th class = "step-task">Task</th>
+            <th>Assigned</th>
+            <th>Status</th>
+        </tr>
+        <tr ng-repeat = "step in steps">
+            <td class = "step-task"><input input type="text" ng-model = "step.stepTask"></td>
+            <td class = "step-assigned">
+                <select class = "card-points" ng-model = "step.userId"
+                    ng-options = "user.id as (user.first_name +' '+ user.last_name) for user in users"> 
+                </select>
+            </td>
+            <td class = "step-status">
+                <select ng-model = "step.stepStatus">
+                  <option ng-repeat = "status in statuses" value = "{{status}}">{{status}}</option> 
+                </select>
+            </td>
+        </tr>
+    </table>
+
+    <i class = "remove-step fa fa-minus" aria-hidden="true" title = "Remove Step" ng-click = "removeStep()"></i>
+    <i class = "add-step fa fa-plus" aria-hidden="true" title = "Add Step" ng-click = "addStep()"></i>
+</div>

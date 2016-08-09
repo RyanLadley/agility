@@ -1,0 +1,34 @@
+<div class = "backlog-page">
+    <div class = "backlog-header listing-header">
+        <h1 class = "backlog-title listing-title" >Backlog</h1>
+    </div>
+    <div class = "section-label backlog-section">
+        <h2 class = "section-title">User Stories</h2>
+    </div>
+    <div>
+        <table style="width:100%">
+            <tr class = "table-header">
+                <th class = "card-index">Index</th>
+                <th class = "card-name">Name</th>
+                <th class = "card-epic">Epic</th>
+                <th class = "card-poc">Point of Contact</th>
+                <th class = "card-status">Status</th>
+                <th class = "card-points">Points</th>
+            </tr>
+            <tr class = "backlog-row" ng-repeat = "card in backlog" ng-click = "viewCard(card.index)">
+                <td>{{card.index}}</td>
+                <td>{{card.name}}</td>
+                <td>
+                    <epic-label epic = "card.epic"></epic-label>
+                </td>
+                <td>{{card.poc.first_name + ' ' + card.poc.last_name}}</td>
+                <td class = "status-{{card.status}}">{{card.status}}</td>
+                <td>{{card.points}}</td>
+            </tr>
+        </table>
+    </div>
+    <div class = "section-label backlog-section">
+        <h2 class = "section-title"> Spikes</h2>
+    </div>
+    
+</div>

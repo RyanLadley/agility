@@ -1,0 +1,124 @@
+<div class = "details-page">
+
+    <!--Card Title and Index-->
+    <div class = "details-header {{card.type}}-card-header">
+        <h1 class = "card-index">{{card.index}}</h1>
+        <h1 ng-if = "editName == false" class = "card-name">{{card.name}}</h1>
+        <input ng-if = "editName" type="text" class = "card-name" ng-model = "updatedName.cardName">
+        
+        <i ng-if = "editName == false" class="edit-icon edit-icon-toggle fa fa-pencil-square-o" class = "edit-icon" ng-click = "toggleEditName()"></i>
+        <div ng-if = "editName" class = "edit-confirmation">
+            <i  class = "edit-icon edit-icon-cancel fa fa-close fa-lg"  title = "Cancel" ng-click = "toggleEditName()"></i>
+            <i class = "edit-icon edit-icon-confirm fa fa-check fa-lg" title = "Save" ng-click = "saveName()"></i>
+        </div>
+
+    </div>
+
+    <div class = "details-body">
+ 
+        <!--Card Desription-->
+        <div class = "details-left">
+            <div class = "details-label section-label">
+                <h2>Description</h2>
+                <i ng-if = "editDescription == false" class="edit-icon edit-icon-toggle edit-icon fa fa-pencil-square-o" class = "edit-icon" ng-click = "toggleEditDescription()"></i>
+                <div ng-if = "editDescription" class = "edit-confirmation">
+                    <i  class = "edit-icon edit-icon-cancel fa fa-close"  title = "Cancel" ng-click = "toggleEditDescription()"></i>
+                    <i class = "edit-icon edit-icon-confirm fa fa-check" title = "Save" ng-click = "saveDescription()"></i>
+                </div>
+            </div>
+            <p ng-if = "editDescription == false" class = "card-description"> {{card.description}}</p>
+            <textarea ng-if = "editDescription" class = "card-description" ng-model = "updatedDescription.cardDescription"></textarea>
+        </div>
+
+ 
+        <!--Card Details -->
+        <div class = "details-right">
+        
+            <div class = "details-label section-label">
+                <h3> Card Details</h3>
+                <i ng-if = "editDetails == false" class="edit-icon edit-icon-toggle fa fa-pencil-square-o" class = "edit-icon" ng-click = "toggleEditDetails()"></i>
+                <div ng-if = "editDetails" class = "edit-confirmation">
+                    <i  class = "edit-icon edit-icon-cancel fa fa-close"  title = "Cancel" ng-click = "toggleEditDetails()"></i>
+                    <i class = "edit-icon edit-icon-confirm fa fa-check" title = "Save" ng-click = "saveDetails()"></i>
+                </div>
+            </div>
+        
+            <div ng-if = "editDetails == false">
+                <div class = "label-value">
+                    <label> Assigned Epic: </label>
+                    <epic-label epic = "card.epic"></epic-label>
+                </div>
+
+                <div class = "label-value">
+                    <label>Created: </label>
+                    <p class = "card-created">{{card.created | date }}</p>
+                </div>
+                
+                <div class = "label-value">
+                    <label>Updated:</label>
+                    <p class = "card-updated">{{card.updated | date }}</p>
+                </div>
+                
+                <div class = "label-value">
+                    <label>Points:</label>
+                    <p class = "card-points">{{card.points}}</p>
+                </div>
+
+                <div class = "label-value">
+                    <label> Point of Contact: </label>
+                    <p class = "card-poc">{{card.poc.first_name + ' ' + card.poc.last_name}}</p>
+                </div>
+
+                <div class = "label-value">
+                    <label> Status: </label>
+                    <p class = "card-status status-{{card.status}}" >{{card.status}}</p>
+                </div>
+            </div>
+            <set-details-panel ng-if = "editDetails" card = "updatedDetails" users = "users" statuses = "statuses" epics = "epics"></set-details-panel>
+        </div>
+    
+    </div>
+
+    
+
+    <div class = "details-foot">
+
+        <!--Card Steps if card is standard-->
+        <div class = "steps" ng-if = "card.type == 'Standard'">
+            <div  class = "details-label section-label">
+                <h2>Steps to Completion</h2>
+                <i ng-if = "editSteps == false" class=" edit-icon-toggle edit-icon fa fa-pencil-square-o" class = "edit-icon" ng-click = "toggleEditSteps()"></i>
+                <div ng-if = "editSteps" class = "edit-confirmation">
+                    <i  class = "edit-icon edit-icon-cancel fa fa-close"  title = "Cancel" ng-click = "toggleEditSteps()"></i>
+                    <i class = "edit-icon edit-icon-confirm fa fa-check" title = "Save" ng-click = "saveSteps()"></i>
+                </div>
+            </div>
+            <table ng-if = "editSteps == false" style="width:100%">
+                <tr class = "table-header">
+                    <th>Task</th>
+                    <th>Assigned</th>
+                    <th>Status</th>
+                </tr>
+                <tr ng-repeat = "step in card.steps">
+                    <td class = "step-task">{{step.task}}</td>
+                    <td class = "step-assigned">{{step.assigned.first_name +' ' +step.assigned.last_name}}</td>
+                    <td class = "step-status status-{{step.status}}">{{step.status}}</td>
+                </tr>
+            </table>
+            <set-steps-panel ng-if = "editSteps" steps = "updatedSteps" users = "users" statuses = "statuses"></set-steps-panel>
+        </div>
+        
+        <!--Assigned Cards if card is an Epic-->
+        <div class = "assigned-cards" ng-if = "card.type == 'Epic'">
+            <h2 class = "assigned-cards-label section-label">Cards Assigned to this Epic</h2>
+            <div class = "card-container" >
+                <div ng-repeat = 'card in card.assigned_cards'>
+                    <card class = "assigned-card" card = 'card' ></card>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+

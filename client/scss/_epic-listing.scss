@@ -1,0 +1,17 @@
+.epic-listing-page{
+    margin: 3%;
+    min-width: 750px;
+
+    .card-container{
+        display: inline-block;
+        margin-bottom: 50px;
+        width: 100%;
+
+        .epic-card{
+            float:left;
+            margin-right: 1%;
+            margin-bottom: 10px;
+        }
+
+    }
+}

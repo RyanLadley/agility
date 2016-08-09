@@ -1,11 +1,11 @@
 <div ng-if = "sprint.id != 'None'" class = "sprint">
-    <div class = "sprint-header">
-        <h1 class = sprint-title>{{sprint.name}}</h1>
+    <div class = "listing-header sprint-header">
+        <h1 class = "listing-title sprint-title">{{sprint.name}}</h1>
         <h3 class = "sprint-timeframe" ng-if = "sprint.start_date != 'None' && sprint.end_date != 'None'"> {{sprint.start_date | date}} - {{sprint.end_date | date}}</h3>
         <h3 class = "sprint-points"> Total Points: {{sprint.points}}</h3>
     </div>
     <div class = "section-label sprint-section">
-        <h2 class = "test">User Stories</h2>
+        <h2 class = "section-title sprint-section-title">User Stories</h2>
         <i class = "remove-from-sprint fa fa-minus" aria-hidden="true" title = "Remove Step" ng-click = "removeCard()"></i>
         <i class = "add-to-sprint fa fa-plus" aria-hidden="true" title = "Add Step" ng-click = "addCard()"></i>
     </div>
@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class = "section-label sprint-section">
-        <h2 class = "spike"> Sprint Spikes</h2>
+        <h2 class = "section-title sprint-section-title"> Sprint Spikes</h2>
     </div>
     <div class = card-container>
         <div ng-repeat = 'card in cards'>

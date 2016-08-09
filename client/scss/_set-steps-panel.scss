@@ -1,0 +1,41 @@
+.set-steps-panel{
+    .remove-step, .add-step{
+        color: $action-icon-grey;
+        float: right;
+        margin-top: 8px;
+        cursor: pointer;
+
+        &:hover{
+            color: $remove-red;
+        }
+    }
+
+    .add-step{
+        margin-right: 10px;
+
+        &:hover{
+            margin-top: 8px;
+            color: $add-green;
+        }
+    }
+
+    
+
+    input.card-name{
+        float: left;
+        margin-top: 15px;
+        margin-right: 5px;
+        font-weight: bold;
+        font-size: 25px;
+        width: 25%;
+    }
+
+    table{
+        .step-task{
+            width: 70%;
+        }
+        input{
+            width: 99%;
+        }
+    }
+} 

@@ -1,0 +1,36 @@
+<div class = "label-value">
+    <label> Assigned Epic: </label>
+    <epic-label epic = "selectedEpic"></epic-label>
+    <select class = "card-poc" ng-model = "card.epicId"
+        ng-options = "epic.id as epic.name for epic in epics">    
+    </select>
+
+</div>
+
+<div class = "label-value">
+    <label>Created: </label>
+    <p class = "card-created">{{card.cardCreated | date }}</p>
+</div>
+
+<div class = "label-value">
+    <label>Updated:</label>
+    <p class = "card-modified">{{card.cardUpdated | date }}</p>
+</div>
+
+<div class = "label-value">
+    <label>Points:</label>
+    <input type="number" class = "card-points" ng-model = "card.cardPoints" min="0">
+</div>
+
+<div class = "label-value">
+    <label> Point of Contact: </label>
+    <select class = "card-poc" ng-model = "card.userId" 
+        ng-options = "user.id as (user.first_name +' '+ user.last_name) for user in users">    
+    </select>
+</div>
+<div class = "label-value">
+    <label> Status: </label>
+    <select class = "card-status" ng-model = "card.cardStatus">
+      <option ng-repeat = "status in statuses" value = "{{status}}">{{status}}</option> 
+    </select>
+</div>

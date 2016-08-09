@@ -11,13 +11,15 @@ import sys
 def get_project_users(project_designator, cursor = None):
     
     cursor.execute("""
-                SELECT id, first_name, last_name FROM ag_first.user;""")
+                SELECT  id as user_id, 
+                        first_name as user_first_name, 
+                        last_name as user_last_name 
+                FROM user;""")
 
     results = cursor.fetchall()
 
     users = []
     for row in results:
-        users.append(User.map_from_row(row))
+        users.append(User.map_from_form(row))
 
-    print(users)
     return users

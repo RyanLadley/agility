@@ -29,6 +29,15 @@ app.directive('discussionBoard', function() {
        templateUrl: '/res/components/directives/discussion-board/discussion-board.template.html'
     };
 })
+app.directive('epicLabel', function() {
+    return{
+        restrict: 'E',
+        scope: {
+            epic: '='
+        },
+       templateUrl: '/res/components/directives/epic-label/epic-label.template.html'
+    };
+})
 app.directive('openSprint', function() {
     return{
         restrict: 'E',
@@ -52,6 +61,31 @@ app.directive('projectImage', function() {
             card: '='
         },
        templateUrl: '/res/components/directives/project-image/project-image.template.html'
+    };
+})
+app.directive('setDetailsPanel', function() {
+    return{
+        restrict: 'E',
+        controller : 'setDetailsPanelController',
+        scope: {
+            card: '=',
+            users: '=',
+            statuses: '=',
+            epics: '='
+        },
+       templateUrl: '/res/components/directives/set-details-panel/set-details-panel.template.html'
+    };
+})
+app.directive('setStepsPanel', function() {
+    return{
+        restrict: 'E',
+        controller: 'setStepsPanelController',
+        scope: {
+            steps: '=',
+            users: '=',
+            statuses: '='
+        },
+       templateUrl: '/res/components/directives/set-steps-panel/set-steps-panel.template.html'
     };
 })
 app.directive('sidebar', function() {
