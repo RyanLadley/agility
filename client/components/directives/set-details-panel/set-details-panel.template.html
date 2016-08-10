@@ -1,7 +1,7 @@
 <div class = "label-value">
     <label> Assigned Epic: </label>
     <epic-label epic = "selectedEpic"></epic-label>
-    <select class = "card-poc" ng-model = "card.epicId"
+    <select ng-if = "card.cardType != 'Epic'" class = "card-poc" ng-model = "card.epicId"
         ng-options = "epic.id as epic.name for epic in epics">    
     </select>
 

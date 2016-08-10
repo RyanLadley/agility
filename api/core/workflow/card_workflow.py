@@ -23,11 +23,19 @@ def create_card():
 
     card = Card.map_from_form(card_form)
     
-    steps_form = card_form.get('steps')
-    steps = create_objects_from_form_array(Step, steps_form)
-    card.add_steps(steps)
+    if card.type == CardType(0).name: #Standard
+        steps_form = card_form.get('steps')
+        steps = create_objects_from_form_array(Step, steps_form)
+        card.add_steps(steps)
+        return_value = card_insert.new_card(card)
 
-    return card_insert.new_card(card)
+    elif card.type == CardType(1).name: #Epic
+        return_value = card_insert.new_epic(card)
+
+    else:
+        return_value = response.error("Card Type is Invalid")
+    
+    return return_value
 
 
 @workflow.route('/get/cards/user', methods = ['POST'])
@@ -69,7 +77,7 @@ def get_card(card_index):
 def get_card_name(card_id):
 
     card = card_select.card_name(card_id)
-    print(card)
+    
     return response.success(card.serialize())
 
 

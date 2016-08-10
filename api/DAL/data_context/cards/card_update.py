@@ -39,6 +39,7 @@ def steps(steps, cursor = None):
 @DatabaseConnection
 def details(card, cursor = None):
 
+    print(card.serialize())
     cursor.execute("""
         UPDATE card
             SET card.epic = %(card_epic)s, 

@@ -35,7 +35,7 @@ def new_card(card, cursor = None):
                             %(points)s, 
                             %(poc)s);""",
                 {'proj_des': card.proj_designator(), 'proj_num': card.proj_number(), 'name': card.name, 'type':CardType[card.type].value, 
-                 'epic': card.epic.id, 'status' : Status[card.status].value, 'points': card.points, 'poc' : card.poc})
+                 'epic': card.epic.id, 'status' : Status[card.status].value, 'points': card.points, 'poc' : card.poc.id})
 
     cursor.execute("""SELECT LAST_INSERT_ID();""")
     new_id = cursor.fetchone()
@@ -61,7 +61,65 @@ def new_card(card, cursor = None):
                                 %(task)s, 
                                 %(assigned_to)s, 
                                 %(status)s)""",
-                    {'card_id': new_id['LAST_INSERT_ID()'], 'task' : step.task, 'assigned_to': step.assigned, 'status': Status[step.status].value})
+                    {'card_id': new_id['LAST_INSERT_ID()'], 'task' : step.task, 'assigned_to': step.assigned.id, 'status': Status[step.status].value})
+
+    return response.success()
+
+
+@DatabaseConnection
+def new_epic(card, cursor = None):
+    
+    cursor.execute("""INSERT INTO  card (
+                            proj_designator, 
+                            proj_number, 
+                            name, 
+                            type, 
+                            created, 
+                            updated, 
+                            status, 
+                            points, 
+                            poc)
+                        values (
+                            %(proj_des)s, 
+                            %(proj_num)s, 
+                            %(name)s, %(type)s,  
+                            NOW(), 
+                            NOW(), 
+                            %(status)s, 
+                            %(points)s, 
+                            %(poc)s);""",
+                {'proj_des': card.proj_designator(), 'proj_num': card.proj_number(), 'name': card.name, 'type':CardType[card.type].value, 
+                 'status' : Status[card.status].value, 'points': card.points, 'poc' : card.poc.id})
+
+    cursor.execute("""SELECT LAST_INSERT_ID();""")
+    card_id = cursor.fetchone()
+
+    cursor.execute("""INSERT INTO  card_description (
+                            card_id, 
+                            description)
+                       values (
+                            %(card_id)s, 
+                            %(description)s)""",
+                {'card_id': card_id['LAST_INSERT_ID()'], 'description': card.description})
+    
+    cursor.execute("""INSERT INTO  epic (
+                            card_id,
+                            background_color,
+                            foreground_color)
+                       values (
+                            %(card_id)s,
+                            %(background_color)s,
+                            %(foreground_color)s)""",
+                {'card_id': card_id['LAST_INSERT_ID()'], 'background_color': card.epic.background_color, 'foreground_color': card.epic.foreground_color})
+    
+    cursor.execute("""SELECT LAST_INSERT_ID();""")
+    epic_id = cursor.fetchone()
+        
+    cursor.execute("""UPDATE card
+                        SET card.epic = %(epic)s
+                    WHERE card.id = %(card_id)s""",
+                {'card_id': card_id['LAST_INSERT_ID()'], 'epic': epic_id['LAST_INSERT_ID()']})
+
 
     return response.success()
 

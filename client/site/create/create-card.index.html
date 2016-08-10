@@ -1,5 +1,5 @@
 <div class = "create-card-page">
-    <div class = "details-header standard-header">
+    <div class = "details-header {{newCard.cardType}}-card-header">
         <h1 class = "card-index">{{newCard.cardIndex}}</h1>
         <input type="text" class = "card-name" placeholder="Card Name" ng-model = "newCard.cardName">
         <h3 class = "create-card submit" ng-click = 'createCard()'>
@@ -20,12 +20,32 @@
     </div>
 
     <div class = "details-foot">
-        <div class = "steps">
+        
+        <div ng-if = "newCard.cardType != 'Epic'" class = "steps">
             <div class = "step-header section-label">
                 <h2 class = "steps-label">Steps to Completion</h2>
-
             </div>
             <set-steps-panel steps = "newCard.steps" users = "users" statuses = "statuses"></set-steps-panel>
+        </div>
+
+
+        <div ng-if = "newCard.cardType == 'Epic'">
+
+            <div class = "color-header section-label">
+                <h2 class = "color-label">Label Color Selection</h2>
+            </div>
+            <div class = "color-selection">
+                <div class = "label-value color-inputs" title= "Color Selector Requires HTML5. If no selector appears, manual hexidecimal color input is accepted">
+                    <label>Background Color:</label>
+                    <input type="color" ng-model = "newCard.epicBackgroundColor"">
+                    <input type="text" ng-model = "newCard.epicBackgroundColor"">
+                </div>
+                <div class = "label-value color-inputs" title= "Color Selector Requires HTML5. If no selector appears, manual hexidecimal color input is accepted">
+                    <label>Foreground Color:</label>
+                    <input type="color" ng-model = "newCard.epicForegroundColor">
+                    <input type="text" ng-model = "newCard.epicForegroundColor">
+                </div>
+            </div>
         </div>
     </div>
 </div>

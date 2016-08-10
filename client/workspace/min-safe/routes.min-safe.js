@@ -25,7 +25,7 @@ app.config(['$routeProvider', '$locationProvider',
             templateUrl: '/res/site/card-details/card-details.index.html'
         }
     )
-    .when("/create/card",
+    .when("/create/card/:cardType",
         {
             controller: 'createCardController',
             templateUrl: '/res/site/create/create-card.index.html'

@@ -46,4 +46,18 @@
             width: 99%;
         }
     }
+
+    .color-label{
+        margin: 20px 0 0 0;
+    }
+
+    .color-selection{
+        display: inline-block;
+        width: 100%;
+
+        .color-inputs{
+            float:left;
+            margin-right: 50px;
+        }
+    }
 }

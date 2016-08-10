@@ -16,13 +16,13 @@ class Card:
         card.id = form.get('card_id')
         card.index = card._get_index_from_form(form)
         card.name = form.get('card_name')
-        card.type = CardType(form.get('card_type') or 0).name
         card.created = form.get('card_created')
         card.updated = form.get('card_updated')
         card.points = form.get('card_points')
-        card.status = card._get_status_from_form(form)
         card.description = form.get('card_description')
         
+        card.type =  card._get_type_from_form(form)
+        card.status = card._get_status_from_form(form)
 
         card.poc = User.map_from_form(form) #point of contact
         card.epic = Epic.map_from_form(form)
@@ -87,6 +87,13 @@ class Card:
             return Status(form.get('card_status')).name
         except ValueError:
             return form.get('card_status')
+
+    def _get_type_from_form(self, form):
+
+        try:
+            return CardType(form.get('card_type')).name
+        except ValueError:
+            return form.get('card_type')
 
 
     def _serialize_steps(self):

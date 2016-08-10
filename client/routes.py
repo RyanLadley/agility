@@ -19,7 +19,7 @@ def res(resource_path):
 @client_side.route('/')
 @client_side.route('/home')
 @client_side.route('/card/<card_id>')
-@client_side.route('/create/card')
+@client_side.route('/create/card/<card_type>')
 @client_side.route('/list/epics')
 @client_side.route('/list/sprint/current')
 @client_side.route('/list/backlog')

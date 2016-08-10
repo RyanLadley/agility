@@ -1,6 +1,5 @@
 app.controller('cardDetailsController', function($scope, $routeParams, postRequestService){
     postRequestService.request('/api/get/card/' +$routeParams.cardId).then(function(request){
-
         $scope.card = request.data.response;
     })
 
@@ -49,6 +48,7 @@ app.controller('cardDetailsController', function($scope, $routeParams, postReque
 
         $scope.updatedDetails = {
             cardId :  $scope.card.id,
+            cardType: $scope.card.type,
             epicId : $scope.card.epic.id,
             cardCreated: $scope.card.created,
             cardUpdated: $scope.card.updated,
@@ -116,7 +116,6 @@ app.controller('cardDetailsController', function($scope, $routeParams, postReque
                 stepStatus: $scope.card.steps[i].status
             })
         }
-        console.log($scope.updatedSteps)
     }
 
     $scope.saveSteps = function(){
