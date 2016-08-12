@@ -1,7 +1,7 @@
-app.controller('addCardToSprintController', ['$scope', '$location', '$route', 'postRequestService', function($scope,$location, $route, postRequestService){
+app.controller('addCardToSprintController', ['$scope', '$location', '$route', '$cookies', 'postRequestService', function($scope,$location, $route, $cookies, postRequestService){
 
 
-    postRequestService.request('/api/cards/get/backlog').then(function(request){
+    postRequestService.request('/api/cards/get/backlog/project/' +$cookies.get('project')).then(function(request){
         console.log(request)
         $scope.availableCards = request.data.response
     })
@@ -20,8 +20,13 @@ app.controller('addCardToSprintController', ['$scope', '$location', '$route', 'p
 }])
     
    
-app.controller('backlogController', ['$scope', '$location', 'postRequestService', function($scope, $location, postRequestService){
-    postRequestService.request('/api/cards/get/backlog').then(function(success){
+app.controller('adminController', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location){
+    if($rootScope.isSignedIn){
+        $location.url("/")
+    }
+}]);
+app.controller('backlogController', ['$scope', '$location', '$cookies', 'postRequestService', function($scope, $location, $cookies, postRequestService){
+    postRequestService.request('/api/cards/get/backlog/project/' +$cookies.get('project')).then(function(success){
         $scope.backlog = success.data.response;
     })
 
@@ -31,8 +36,11 @@ app.controller('backlogController', ['$scope', '$location', 'postRequestService'
     }
 
 }]);
-app.controller('cardDetailsController', ['$scope', '$routeParams', 'postRequestService', function($scope, $routeParams, postRequestService){
-    postRequestService.request('/api/get/card/' +$routeParams.cardId).then(function(request){
+app.controller('cardDetailsController', ['$scope', '$routeParams', '$cookies', 'postRequestService', function($scope, $routeParams, $cookies, postRequestService){
+    
+    //api call is "/api/get/card/<card_index>/project/<project_id>"
+    var initApiCall = '/api/get/card/' +$routeParams.cardId +'/project/'+$cookies.get('project')
+    postRequestService.request(initApiCall).then(function(request){
         $scope.card = request.data.response;
     })
 
@@ -154,7 +162,7 @@ app.controller('cardDetailsController', ['$scope', '$routeParams', 'postRequestS
     $scope.saveSteps = function(){
         // url = /api/card/<cardID>/update/steps'
         var apiUrl = '/api/card/'+$scope.card.id +'/update/steps';
-
+        
         postRequestService.request(apiUrl, $scope.updatedSteps).then(function(request){
             $scope.card.steps = request.data.response;
             $scope.editSteps = false;
@@ -165,7 +173,7 @@ app.controller('cardDetailsController', ['$scope', '$routeParams', 'postRequestS
     var getSelections = function(){
         if (!$scope.users || !$scope.statuses || !$scope.epic){
             $scope.epics = [$scope.card.epic];
-            postRequestService.request('/api/page/create/card', $scope.newCard).then(function(success){
+            postRequestService.request('/api/page/create/card/project/' +$cookies.get('project')).then(function(success){
                 $scope.statuses = success.data.response.statuses;
 
                 unassigned = [{'id' : 0 ,'first_name' : 'Unassigned'}]
@@ -185,11 +193,12 @@ app.controller('cardController', ['$scope', function($scope){
     }
 
 }]);
-app.controller('createCardController', ['$scope', '$routeParams', 'postRequestService', function($scope, $routeParams, postRequestService){
+app.controller('createCardController', ['$scope', '$routeParams', '$cookies', 'postRequestService', function($scope, $routeParams, $cookies, postRequestService){
     
     //Basic Variables every Card Has
     $scope.newCard =
     {
+        cardProject: $cookies.get('project'),
         cardIndex: "",
         cardName: "",
         cardType: $routeParams.cardType,
@@ -199,7 +208,7 @@ app.controller('createCardController', ['$scope', '$routeParams', 'postRequestSe
         userId: 0,
         cardStatus: "Open",
         cardDescription: "",
-        epicId: "",
+        epicId: "0",
         epicBackgroundColor: "#ffffff", //Only populated igf card is an epic
         epicForegroundColor: "#000000", //Only populated igf card is an epic
         steps: [] //Only populated if card is standard
@@ -243,7 +252,7 @@ app.controller('createCardController', ['$scope', '$routeParams', 'postRequestSe
 
     //Retrieve all data for drop down menus from api (Users, Statuses, and Active Epics)
     $scope.epics = [{id :0 , name: "None"}]
-    postRequestService.request('/api/page/create/card', $scope.newCard).then(function(request){
+    postRequestService.request('/api/page/create/card/project/' +$cookies.get('project')).then(function(request){
             $scope.newCard.cardIndex = request.data.response.card_index;
             $scope.statuses = request.data.response.statuses;
 
@@ -265,15 +274,57 @@ app.controller('createCardController', ['$scope', '$routeParams', 'postRequestSe
     }
 
 }]);
-app.controller('epicListingController', ['$scope', '$location', 'postRequestService', function($scope, $location, postRequestService){
+app.controller('createProjectController', ['$scope', '$location', '$cookies', 'postRequestService', function($scope, $location, $cookies, postRequestService){
     
-    postRequestService.request('/api/epics/get/active').then(function(request){
+    $scope.project = {
+        create: true,
+        name: "New Project",
+        designator: "PROJ",
+        image: "/image/project/0/default.jpg"
+    }
+
+    $scope.apiImage;
+    $scope.uploadImage = function(element){
+        $scope.apiImage = element.files;
+        var reader = new FileReader();
+
+        reader.onload = function(event) {
+            $scope.project.image = event.target.result
+            $scope.$apply()
+
+        }
+        // when the file is read it triggers the onload event above.
+        reader.readAsDataURL(element.files);
+    }
+    
+    $scope.submit = function(){
+        var newProject = {
+            projName: $scope.project.name,
+            projDesignator: $scope.project.designator,
+            image: $scope.project.image
+        }
+
+        postRequestService.request('/api/project/create', newProject).then(function(request){
+            projectId = request.data.response
+
+            var now = new Date()
+            var oneYear = new Date(now.getFullYear()+1, now.getMonth(), now.getDate());
+            
+            $cookies.put('project', projectId, {'expires': oneYear})
+            $location.url('/')
+            
+        });
+    }
+}]);
+app.controller('epicListingController', ['$scope', '$location', '$cookies', 'postRequestService', function($scope, $location, $cookies, postRequestService){
+    
+    postRequestService.request('/api/epics/get/active/project/' +$cookies.get('project')).then(function(request){
         console.log(request.data.status)
         $scope.epicCards = request.data.response
     })
 
 }]);
-app.controller('homeController', ['$scope', 'postRequestService', function($scope, postRequestService){
+app.controller('homeController', ['$scope', '$cookies', 'postRequestService', function($scope, $cookies, postRequestService){
 
     $scope.discussion = [
     {
@@ -291,31 +342,80 @@ app.controller('homeController', ['$scope', 'postRequestService', function($scop
         message: "Te pro legimus gloriatur referrentur, altera impedit gloriatur eu quo, admodum consulatu id vim. Eu homero tempor eos, mea laoreet consetetur an. Vim diam oporteat moderatius ad. Mei cu mundi fabellas, usu mundi sanctus albucius ea. Eam at aeque erroribus omittantur, eam simul mediocritatem no, nulla dicant ornatus eu mei."
     }];  
 
-    postRequestService.request('/api/page/home').then(function(success){
-        $scope.cards = success.data.response.cards;
-        $scope.sprint = success.data.response.sprint
-        console.log($scope.sprint.id)
+    $scope.project = {
+        name: "Loading...",
+        image: "0/default.jpg"
+    }
+    postRequestService.request('/api/page/home/project/'+$cookies.get('project')).then(function(request){
+        $scope.cards = request.data.response.cards;
+        $scope.sprint = request.data.response.sprint
+        $scope.project = request.data.response.project
+        console.log($scope.project.name)
     })
     
     $scope.confirmSprintClosure = function(){
         var confirmed = confirm("Are you sure you want to close the sprint?\nAny card not closed will be moved to the backlog.")
         if(confirmed){
-            postRequestService.request('/api/sprint/close').then(function(success){})
+            postRequestService.request('/api/sprint/close/project/' +$cookies.get('project')).then(function(success){})
         }
 
     }
 
     $scope.displayOpenSprint = false
+    $scope.toggleOpenSprint = function(){
+        $scope.displayOpenSprint = !$scope.displayOpenSprint
+    }
+    $scope.logout = function(){
+        $cookies.remove('token')
+    }
 
 }]);
-app.controller('openSprintController', ['$scope', '$location', '$route', 'postRequestService', function($scope,$location, $route, postRequestService){
+app.controller('loginController', ['$scope', '$rootScope', '$cookies', '$location', 'postRequestService', function($scope, $rootScope, $cookies, $location, postRequestService){
+    $scope.login = {}
+    $scope.submit = function(){
+        console.log($scope.login)
+        if(validEmail() && validPassword() ){
+            postRequestService.request("/api/admin/login", $scope.login).then(function(request){
+                if(request.data.status === "success"){
+                    var now = new Date()
+                    var oneYear = new Date(now.getFullYear()+1, now.getMonth(), now.getDate());
+                    $cookies.putObject('token', request.data.response, {'expires': oneYear})
+                    $location.url("/")
+                }
+                else{
+                    $scope.failureMessage = request.data.response;
+                }
+            });
+        }
+    }
+
+
+    var validPassword = function(){
+        if(!$scope.login.password || $scope.login.password.length < 6){
+            $scope.failureMessage = "Password must be at least 6 characters";
+            return false;
+        }
+        return true;
+    }
+    
+    var validEmail = function(){
+        if(!$scope.login.email || !$scope.loginForm.loginEmail.$valid){
+            $scope.failureMessage = "The email address provided is invalid";
+            return false;
+        }
+        return true;
+    }
+
+}]);
+app.controller('openSprintController', ['$scope', '$location', '$route', '$cookies', 'postRequestService', function($scope,$location, $route, $cookies, postRequestService){
 
     var month = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"];
 
     $scope.sprint = {
         name: "Sprint for " + month[new Date().getMonth()],
-        endDate: 4
+        endDate: 4,
+        project: $cookies.get('project')
     }
 
     $scope.cancel = function(){
@@ -329,6 +429,78 @@ app.controller('openSprintController', ['$scope', '$location', '$route', 'postRe
 }]);
     
    
+app.controller('registerController', ['$scope', '$cookies', 'postRequestService', function($scope, $cookies, postRequestService){
+    $scope.register = {}
+   $scope.submit = function(){
+
+        if(validEmail() && validFirstName() && validLastName() && validPassword() ){
+
+            postRequestService.request("/api/admin/register", $scope.register).then(function(request){
+                if(request.data.status === "success"){
+                    console.log("Success!!")
+                }
+                else{
+                    $scope.failureMessage = request.data.response
+                }
+            });
+            
+        }
+   }
+
+
+   var validPassword = function(){
+        if(!$scope.register.password || $scope.register.password.length < 6){
+            $scope.failureMessage = "Password must be at least 6 characters"
+            return false
+        }
+        
+        else if($scope.register.password !== $scope.passwordCheck){   
+            $scope.failureMessage = "The passwords don't match"
+            return false
+        }
+        else{
+            return true
+        }
+   }
+
+   var validEmail = function(){
+        if(!$scope.register.email || !$scope.registerForm.emailInput.$valid){
+            $scope.failureMessage = "The email address provided is invalid"
+            return false
+        }
+        return true
+   }
+
+   var validFirstName = function(){
+        if(!$scope.register.firstName || $scope.register.firstName.length < 1){
+            $scope.failureMessage = "Please enter your first name."
+            return false
+        }
+        return true
+   }
+
+   var validLastName = function(){
+        if(!$scope.register.lastName || $scope.register.lastName.length < 1){
+            $scope.failureMessage = "Please enter your last name."
+            return false
+        }
+        return true
+   }
+
+}]);
+app.controller('selectProjectController', ['$scope', '$cookies', '$location', 'postRequestService', function($scope, $cookies, $location, postRequestService){
+    postRequestService.request('/api/project/get/user').then(function(request){
+        $scope.projects = request.data.response
+    });
+
+    $scope.select = function(projectId){
+        var now = new Date()
+        var oneYear = new Date(now.getFullYear()+1, now.getMonth(), now.getDate());
+        $cookies.put('project', projectId, {'expires': oneYear})
+        $location.url('/')
+    }
+
+}]);
 app.controller('setDetailsPanelController', ['$scope', 'postRequestService', function($scope, postRequestService){
     
     $scope.$watch('card.epicId', function(epicId){
@@ -413,9 +585,9 @@ app.controller('sidebarController', ['$scope', '$location', function($scope, $lo
         };
     });
 }]);
-app.controller('sprintController', ['$scope', '$location', 'postRequestService', function($scope, $location, postRequestService){
+app.controller('sprintController', ['$scope', '$location', '$cookies', 'postRequestService', function($scope, $location, $cookies, postRequestService){
     
-    postRequestService.request('/api/sprint/get/current_with_cards').then(function(request){
+    postRequestService.request('/api/sprint/get/current_with_cards/project/' +$cookies.get('project')).then(function(request){
         $scope.sprint = request.data.response
     })
 

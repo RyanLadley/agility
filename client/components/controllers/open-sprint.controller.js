@@ -1,11 +1,12 @@
-app.controller('openSprintController', function($scope,$location, $route, postRequestService){
+app.controller('openSprintController', function($scope,$location, $route, $cookies, postRequestService){
 
     var month = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"];
 
     $scope.sprint = {
         name: "Sprint for " + month[new Date().getMonth()],
-        endDate: 4
+        endDate: 4,
+        project: $cookies.get('project')
     }
 
     $scope.cancel = function(){

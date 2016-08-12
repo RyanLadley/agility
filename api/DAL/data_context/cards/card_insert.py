@@ -13,8 +13,8 @@ import sys
 @DatabaseConnection
 def new_card(card, cursor = None):
     
-    cursor.execute("""INSERT INTO  card (
-                            proj_designator, 
+    cursor.execute("""INSERT INTO  card ( 
+                            project,
                             proj_number, 
                             name, 
                             type, 
@@ -24,17 +24,18 @@ def new_card(card, cursor = None):
                             status, 
                             points, 
                             poc)
-                        values (
-                            %(proj_des)s, 
+                        values ( 
+                            %(project)s,
                             %(proj_num)s, 
-                            %(name)s, %(type)s, 
+                            %(name)s, 
+                            %(type)s, 
                             %(epic)s, 
                             NOW(), 
                             NOW(), 
                             %(status)s, 
                             %(points)s, 
                             %(poc)s);""",
-                {'proj_des': card.proj_designator(), 'proj_num': card.proj_number(), 'name': card.name, 'type':CardType[card.type].value, 
+                {'project': card.project, 'proj_num': card.proj_number(), 'name': card.name, 'type':CardType[card.type].value, 
                  'epic': card.epic.id, 'status' : Status[card.status].value, 'points': card.points, 'poc' : card.poc.id})
 
     cursor.execute("""SELECT LAST_INSERT_ID();""")
@@ -70,7 +71,7 @@ def new_card(card, cursor = None):
 def new_epic(card, cursor = None):
     
     cursor.execute("""INSERT INTO  card (
-                            proj_designator, 
+                            project, 
                             proj_number, 
                             name, 
                             type, 
@@ -80,7 +81,7 @@ def new_epic(card, cursor = None):
                             points, 
                             poc)
                         values (
-                            %(proj_des)s, 
+                            %(project)s,
                             %(proj_num)s, 
                             %(name)s, %(type)s,  
                             NOW(), 
@@ -88,7 +89,7 @@ def new_epic(card, cursor = None):
                             %(status)s, 
                             %(points)s, 
                             %(poc)s);""",
-                {'proj_des': card.proj_designator(), 'proj_num': card.proj_number(), 'name': card.name, 'type':CardType[card.type].value, 
+                {'project': card.project, 'proj_num': card.proj_number(), 'name': card.name, 'type':CardType[card.type].value, 
                  'status' : Status[card.status].value, 'points': card.points, 'poc' : card.poc.id})
 
     cursor.execute("""SELECT LAST_INSERT_ID();""")
@@ -103,14 +104,12 @@ def new_epic(card, cursor = None):
                 {'card_id': card_id['LAST_INSERT_ID()'], 'description': card.description})
     
     cursor.execute("""INSERT INTO  epic (
-                            card_id,
                             background_color,
                             foreground_color)
                        values (
-                            %(card_id)s,
                             %(background_color)s,
                             %(foreground_color)s)""",
-                {'card_id': card_id['LAST_INSERT_ID()'], 'background_color': card.epic.background_color, 'foreground_color': card.epic.foreground_color})
+                {'background_color': card.epic.background_color, 'foreground_color': card.epic.foreground_color})
     
     cursor.execute("""SELECT LAST_INSERT_ID();""")
     epic_id = cursor.fetchone()

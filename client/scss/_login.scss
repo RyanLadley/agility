@@ -1,0 +1,19 @@
+
+.login-page{
+    .login-page-content{
+        width: 1000px;
+
+        margin: 150px auto;
+
+        .register{
+            float:left;
+            border-right: solid 1px $section-divide-color;
+            padding-right: 100px;
+        }
+
+        .login{
+            float:left;
+            padding-left: 100px;
+        }
+    }
+}

@@ -35,8 +35,22 @@ app.config(['$routeProvider', '$locationProvider',
             controller: 'backlogController',
             templateUrl: '/res/site/backlog/backlog.index.html'
         }
-    )
-    .otherwise("/",
+    ).when("/select/project",
+        {
+            controller: 'selectProjectController',
+            templateUrl: '/res/site/select-project/select-project.index.html'
+        }
+    ).when("/create/project",
+        {
+            controller: 'createProjectController',
+            templateUrl: '/res/site/create/create-project.index.html'
+        }
+    ).when("/login",
+        {
+            controller: 'adminController',
+            templateUrl: '/res/site/admin/login.index.html'
+        }
+    ).otherwise("/",
     {
         redirectTo: "/"
     })

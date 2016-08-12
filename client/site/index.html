@@ -22,13 +22,11 @@
 
     </head>
     <body>
+            <sidebar ng-if = "isSignedIn"></sidebar>
 
-        <sidebar></sidebar>
-
-        <div class = "content">
-            <ng-view></ng-view>
-        </div>
-
+            <div class = "content">
+                <ng-view></ng-view>
+            </div>
     </body>
 
 </html>

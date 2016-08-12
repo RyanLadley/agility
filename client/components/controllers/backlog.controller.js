@@ -1,5 +1,5 @@
-app.controller('backlogController', function($scope, $location, postRequestService){
-    postRequestService.request('/api/cards/get/backlog').then(function(success){
+app.controller('backlogController', function($scope, $location, $cookies, postRequestService){
+    postRequestService.request('/api/cards/get/backlog/project/' +$cookies.get('project')).then(function(success){
         $scope.backlog = success.data.response;
     })
 

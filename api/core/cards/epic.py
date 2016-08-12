@@ -8,7 +8,7 @@ class Epic:
     def map_from_form(form):
         epic = Epic()
 
-        epic.id = form.get('epic_id')
+        epic.id = form.get('epic_id') or 0
         epic.name = form.get('epic_name')
         epic.background_color = form.get('epic_background_color')
         epic.foreground_color = form.get('epic_foreground_color')

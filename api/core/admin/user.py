@@ -6,14 +6,13 @@ class User:
 
         user = User()
 
-        user.id = form.get('user_id')
+        user.id = form.get('user_id') or 0
 
-        user.first_name = form.get('user_first_name')
-        user.last_name = form.get('user_last_name')
-
+        user.first_name = form.get('user_first_name') or "Unassigned"
+        user.last_name = form.get('user_last_name') or ""
 
         return user
 
     def serialize(self):
 
-        return self.__dict__
+        return {key:str(value) for key,value in self.__dict__.items()}

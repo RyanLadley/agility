@@ -1,7 +1,14 @@
 <div class = "project-icon">
+    
+    <div ng-if = "!project.create" 
+        ng-style = "{'background-image': 'url(/image/project/'+project.image+')'};" class = "project-image">    
+    </div>
 
-<div class = "project-title">
-    <h1>Project Title</h1>
-</div>
+    <div ng-if = "project.create" 
+        ng-style = "{'background-image': 'url('+project.image+')'};" class = "project-image">
+    </div>
 
+    <div class = "project-title">
+        <h1>{{project.name}}</h1>
+    </div>
 </div>

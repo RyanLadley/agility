@@ -9,11 +9,15 @@ import json
 
 
 @DatabaseConnection
-def close_current_sprint(cursor = None):
+def close_current_sprint(project_id, cursor = None):
 
     cursor.execute("""
             UPDATE sprint
-                SET open = 0, closed_date = NOW()
-            WHERE open = 1;""")
+                SET     sprint.open = 0, 
+                        sprint.closed_date = NOW()
+            
+            WHERE   sprint.open = 1 AND
+                    sprint.project = %(project_id)s;""",
+                    {'project_id': project_id})
 
     return response.success()

@@ -3,7 +3,7 @@ app.directive('projectImage', function() {
         restrict: 'E',
         //controller: 'projectImageController',
         scope: {
-            card: '='
+            project: '='
         },
        templateUrl: '/res/components/directives/project-image/project-image.template.html'
     };

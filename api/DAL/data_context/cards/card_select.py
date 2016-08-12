@@ -14,12 +14,12 @@ import sys
 
 
 @DatabaseConnection
-def card_with_user_task(user_id, cursor = None):
+def card_with_user_task(user_id, project_id, cursor = None):
     
     cursor.execute("""
                 SELECT distinct 
                         card.id as card_id, 
-                        card.proj_designator as card_proj_designator, 
+                        project.designator as card_proj_designator, 
                         card.proj_number as card_proj_number, 
                         card.name as card_name, 
                         card.type as card_type, 
@@ -37,10 +37,14 @@ def card_with_user_task(user_id, cursor = None):
                         epic.foreground_color as epic_foreground_color
                     from card
                     JOIN card_description ON card_description.card_id = card.id
+                    JOIN project on card.project = project.id
                     LEFT JOIN epic ON  epic.id = card.epic
-                    LEFT JOIN card AS epic_card ON epic.card_id = epic_card.id
+                    LEFT JOIN card AS epic_card ON epic_card.epic = epic.id
                     LEFT JOIN user ON card.poc = user.id
-                WHERE card.status <> 3 AND (
+                WHERE 
+                    card.project = %(project_id)s AND
+                    card.status <> 3 AND
+                    (epic_card.type = 1 OR card.epic = 0 OR card.epic IS NULL) AND (
                     card.poc = %(user_id)s OR
                     card.id IN 
                         (
@@ -48,7 +52,7 @@ def card_with_user_task(user_id, cursor = None):
                                 from card_steps
                             where assigned = %(user_id)s
                         ));""",
-                {'user_id': user_id})
+                {'user_id': user_id, 'project_id' : project_id})
 
     results = cursor.fetchall()
 
@@ -61,12 +65,12 @@ def card_with_user_task(user_id, cursor = None):
 
 
 @DatabaseConnection
-def card(proj_designator, proj_number, cursor = None):
+def card(project_id, proj_number, cursor = None):
 
     cursor.execute("""
                 SELECT distinct 
                         card.id as card_id, 
-                        card.proj_designator as card_proj_designator, 
+                        project.designator as card_proj_designator, 
                         card.proj_number as card_proj_number, 
                         card.name as card_name, 
                         card.type as card_type, 
@@ -84,11 +88,14 @@ def card(proj_designator, proj_number, cursor = None):
                         epic.foreground_color as epic_foreground_color
                     from card
                     JOIN card_description ON card_description.card_id = card.id
+                    JOIN project on card.project = project.id
                     LEFT JOIN epic ON  epic.id = card.epic
-                    LEFT JOIN card AS epic_card ON epic.card_id = epic_card.id
+                    LEFT JOIN card AS epic_card ON epic_card.epic = epic.id
                     LEFT JOIN user ON card.poc = user.id
-                WHERE card.proj_designator = %(proj)s AND card.proj_number = %(num)s""",
-                {'proj': proj_designator , 'num': proj_number})
+                WHERE   project.id = %(project_id)s AND 
+                        card.proj_number = %(num)s AND
+                        (epic_card.type = 1 OR card.epic = 0 OR card.epic IS NULL)""",
+                {'project_id': project_id , 'num': proj_number})
 
 
     result = cursor.fetchone()
@@ -156,9 +163,10 @@ def card_details(card_id, cursor = None):
                         epic.foreground_color as epic_foreground_color
                     from card
                     LEFT JOIN epic ON  epic.id = card.epic
-                    LEFT JOIN card AS epic_card ON epic.card_id = epic_card.id
+                    LEFT JOIN card AS epic_card ON epic_card.epic = epic.id
                     LEFT JOIN user ON card.poc = user.id
-                WHERE card.id = %(card_id)s""",
+                WHERE   card.id = %(card_id)s AND
+                        (epic_card.type = 1 OR card.epic = 0 OR card.epic IS NULL) = 1""",
                 {'card_id': card_id})
 
     result = cursor.fetchone()
@@ -190,7 +198,7 @@ def cards_assigned_to_epic(epic_id, cursor = None):
 
     cursor.execute("""
                 SELECT  card.id as card_id, 
-                        card.proj_designator as card_proj_designator, 
+                        project.designator as card_proj_designator, 
                         card.proj_number as card_proj_number, 
                         card.name as card_name, 
                         card.type as card_type, 
@@ -207,11 +215,14 @@ def cards_assigned_to_epic(epic_id, cursor = None):
                         epic.background_color as epic_background_color, 
                         epic.foreground_color as epic_foreground_color
                     from card
+                    JOIN project ON card.project = project.id
                     JOIN card_description ON card_description.card_id = card.id
                     JOIN epic ON  epic.id = card.epic
-                    JOIN card AS epic_card ON epic.card_id = epic_card.id
+                    JOIN card AS epic_card ON epic_card.epic = epic.id
                     JOIN user ON card.poc = user.id
-                WHERE card.epic = %(epic_id)s AND card.id <> epic.card_id""",
+                WHERE   card.epic = %(epic_id)s AND
+                        epic_card.type = 1 AND
+                        card.type <> 1""",
                 {'epic_id': epic_id})
 
     results = cursor.fetchall()
@@ -224,24 +235,29 @@ def cards_assigned_to_epic(epic_id, cursor = None):
 
 
 @DatabaseConnection
-def current_project_number(project_designator, cursor = None):
+def next_card_index(project_id, cursor = None):
 
     cursor.execute("""
-            SELECT max(proj_number) as proj_number FROM ag_first.card
-            WHERE proj_designator = %(proj_designator)s
-            ORDER BY proj_number DESC;""",
-        {'proj_designator': project_designator})
+            SELECT  project.designator as card_proj_designator,
+                    (max(card.proj_number) + 1) as card_proj_number 
+                FROM card
+                JOIN project on card.project = project.id
+            WHERE project.id = %(project_id)s;""",
+        {'project_id': project_id})
 
     result = cursor.fetchone()
 
-    return result
+    card = Card.map_from_form(result)
+
+    return card.index
 
 @DatabaseConnection
-def standard_cards_from_sprint(sprint_id, cursor = None):
+def standard_cards_from_sprint(sprint, cursor = None):
     
+    print(sprint.project)
     cursor.execute("""
                 SELECT  card.id as card_id, 
-                        card.proj_designator as card_proj_designator, 
+                        project.designator as card_proj_designator, 
                         card.proj_number as card_proj_number, 
                         card.name as card_name, 
                         card.type as card_type, 
@@ -259,12 +275,15 @@ def standard_cards_from_sprint(sprint_id, cursor = None):
                         epic.foreground_color as epic_foreground_color
                     from card
                     JOIN card_description ON card_description.card_id = card.id
+                    JOIN project on card.project = project.id
                     LEFT JOIN epic ON  epic.id = card.epic
-                    LEFT JOIN card AS epic_card ON epic.card_id = epic_card.id
+                    LEFT JOIN card AS epic_card ON epic_card.epic = epic.id
                     LEFT JOIN user ON card.poc = user.id
                 WHERE card.sprint = %(sprint_id)s AND
-                      card.type = 0""",
-                {'sprint_id': sprint_id})
+                      card.type = 0 AND
+                      (epic_card.type = 1 OR card.epic = 0 OR card.epic IS NULL) AND
+                      card.project = %(project_id)s""",
+                {'sprint_id': sprint.id, 'project_id' : sprint.project})
 
     results = cursor.fetchall()
 
@@ -275,11 +294,11 @@ def standard_cards_from_sprint(sprint_id, cursor = None):
     return cards
 
 @DatabaseConnection
-def backlog(cursor = None):
+def backlog(project_id, cursor = None):
 
     cursor.execute("""
                 SELECT  card.id as card_id, 
-                        card.proj_designator as card_proj_designator, 
+                        project.designator as card_proj_designator, 
                         card.proj_number as card_proj_number, 
                         card.name as card_name, 
                         card.type as card_type, 
@@ -297,10 +316,15 @@ def backlog(cursor = None):
                         epic.foreground_color as epic_foreground_color
                     from card
                     JOIN card_description ON card_description.card_id = card.id
-                    LEFT JOIN epic ON  epic.id = card.epic
-                    LEFT JOIN card AS epic_card ON epic.card_id = epic_card.id
+                    JOIN project on card.project = project.id
+                    LEFT JOIN epic ON  card.epic = epic.id
+                    LEFT JOIN card AS epic_card ON epic_card.epic = epic.id
                     LEFT JOIN user ON card.poc = user.id
-                WHERE card.sprint IS NULL AND card.type <> 1""")
+                WHERE card.sprint IS NULL AND 
+                      card.type <> 1 AND
+                      (epic_card.type = 1 OR card.epic = 0 OR card.epic IS NULL) AND
+                      card.project = %(project_id)s""",
+                      {'project_id': project_id})
 
     results = cursor.fetchall()
 
@@ -312,11 +336,11 @@ def backlog(cursor = None):
 
 
 @DatabaseConnection
-def active_epics(cursor = None):
+def active_epics(project_id, cursor = None):
 
     cursor.execute("""
                 SELECT  card.id as card_id, 
-                        card.proj_designator as card_proj_designator, 
+                        project.designator as card_proj_designator, 
                         card.proj_number as card_proj_number, 
                         card.name as card_name, 
                         card.type as card_type, 
@@ -333,11 +357,15 @@ def active_epics(cursor = None):
                         epic.background_color as epic_background_color, 
                         epic.foreground_color as epic_foreground_color
                     from card
+                    JOIN project on card.project = project.id
                     JOIN card_description ON card_description.card_id = card.id
                     JOIN epic ON  epic.id = card.epic
-                    JOIN card AS epic_card ON epic.card_id = epic_card.id
+                    JOIN card AS epic_card ON epic_card.epic = epic.id
                     LEFT JOIN user ON card.poc = user.id
-                WHERE card.type = 1""")
+                WHERE   card.type = 1 AND
+                        epic_card.type = 1 AND
+                        project.id = %(project_id)s""",
+                        {'project_id': project_id})
 
     results = cursor.fetchall()
 
@@ -349,7 +377,7 @@ def active_epics(cursor = None):
 
 
 @DatabaseConnection
-def active_epic_labels(cursor = None):
+def active_epic_labels(project_id, cursor = None):
 
     cursor.execute("""
                 SELECT  epic.id as epic_id, 
@@ -357,8 +385,11 @@ def active_epic_labels(cursor = None):
                         epic.background_color as epic_background_color, 
                         epic.foreground_color as epic_foreground_color
                     from epic
-                    JOIN card AS epic_card ON epic.card_id = epic_card.id
-                WHERE epic_card.status <> 3""")
+                    JOIN card AS epic_card ON epic_card.epic = epic.id
+                WHERE   epic_card.status <> 3 AND
+                        epic_card.type = 1 AND
+                        epic_card.project = %(project_id)s""",
+                        {'project_id' : project_id})
 
     results = cursor.fetchall()
 

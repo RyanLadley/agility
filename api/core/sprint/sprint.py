@@ -2,29 +2,6 @@ import json
 
 class Sprint: 
 
-    def __init__(self):
-        self.id = None
-        self.name = None
-        self.start_date = None
-        self.end_date = None
-        self.open = None
-        
-        self.points = 0
-        self.cards = []
-
-
-    @staticmethod
-    def map_from_row(row):
-        sprint = Sprint()
-
-        sprint.id = row.get('id')
-        sprint.name = row.get('name')
-        sprint.start_date = row.get('start_date')
-        sprint.end_date = row.get('end_date')
-        sprint.open = row.get('open')
-
-        return sprint
-
     @staticmethod
     def map_from_form(form):
         sprint = Sprint()
@@ -34,6 +11,10 @@ class Sprint:
         sprint.start_date = form.get('start_date')
         sprint.end_date = form.get('end_date') or form.get('endDate')
         sprint.open = form.get('open')
+        sprint.project = form.get('project')
+
+        sprint.cards = []
+        sprint.points = 0
 
         return sprint
 

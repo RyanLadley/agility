@@ -1,4 +1,4 @@
-app.controller('homeController', function($scope, postRequestService){
+app.controller('homeController', function($scope, $cookies, postRequestService){
 
     $scope.discussion = [
     {
@@ -16,20 +16,31 @@ app.controller('homeController', function($scope, postRequestService){
         message: "Te pro legimus gloriatur referrentur, altera impedit gloriatur eu quo, admodum consulatu id vim. Eu homero tempor eos, mea laoreet consetetur an. Vim diam oporteat moderatius ad. Mei cu mundi fabellas, usu mundi sanctus albucius ea. Eam at aeque erroribus omittantur, eam simul mediocritatem no, nulla dicant ornatus eu mei."
     }];  
 
-    postRequestService.request('/api/page/home').then(function(success){
-        $scope.cards = success.data.response.cards;
-        $scope.sprint = success.data.response.sprint
-        console.log($scope.sprint.id)
+    $scope.project = {
+        name: "Loading...",
+        image: "0/default.jpg"
+    }
+    postRequestService.request('/api/page/home/project/'+$cookies.get('project')).then(function(request){
+        $scope.cards = request.data.response.cards;
+        $scope.sprint = request.data.response.sprint
+        $scope.project = request.data.response.project
+        console.log($scope.project.name)
     })
     
     $scope.confirmSprintClosure = function(){
         var confirmed = confirm("Are you sure you want to close the sprint?\nAny card not closed will be moved to the backlog.")
         if(confirmed){
-            postRequestService.request('/api/sprint/close').then(function(success){})
+            postRequestService.request('/api/sprint/close/project/' +$cookies.get('project')).then(function(success){})
         }
 
     }
 
     $scope.displayOpenSprint = false
+    $scope.toggleOpenSprint = function(){
+        $scope.displayOpenSprint = !$scope.displayOpenSprint
+    }
+    $scope.logout = function(){
+        $cookies.remove('token')
+    }
 
 });

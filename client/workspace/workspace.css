@@ -1,3 +1,14 @@
+.login-page .login-page-content {
+  width: 1000px;
+  margin: 150px auto; }
+  .login-page .login-page-content .register {
+    float: left;
+    border-right: solid 1px #D5D5D5;
+    padding-right: 100px; }
+  .login-page .login-page-content .login {
+    float: left;
+    padding-left: 100px; }
+
 .sidebar-container {
   bottom: 0;
   top: 0;
@@ -116,6 +127,40 @@
     .right-container .cards-assigned .cards {
       float: right;
       margin-left: 1%; }
+
+.select-project-page {
+  margin: 20px;
+  margin-left: 100px; }
+  .select-project-page project-image {
+    float: left;
+    margin-right: 100px;
+    cursor: pointer; }
+
+.create-project-page {
+  margin: 50px 100px; }
+  .create-project-page h1 {
+    text-align: center;
+    margin-bottom: 50px; }
+
+.create-project-content {
+  width: 675px;
+  margin: 0 auto; }
+  .create-project-content .create-project-left {
+    float: left; }
+  .create-project-content .create-project-right {
+    padding-top: 75px;
+    padding-bottom: 25px;
+    padding-left: 50px;
+    height: 100%;
+    float: right;
+    border-left: 1px solid #D5D5D5; }
+  .create-project-content h3 {
+    margin: 0; }
+  .create-project-content .create-section {
+    margin-top: 20px; }
+  .create-project-content .create-project-submit {
+    margin-top: 20px;
+    float: right; }
 
 card-two-sided {
   float: left;
@@ -520,20 +565,24 @@ card-two-sided.card-back > card-back {
       margin-bottom: 10px; }
 
 .project-icon {
-  background-color: #A94242;
-  width: 300px;
-  height: 300px;
-  -moz-border-radius: 100%;
-  border-radius: 100%;
-  border: solid black;
-  margin: 2% auto; }
+  display: inline-block; }
+  .project-icon .project-image {
+    display: inline-block;
+    width: 300px;
+    height: 300px;
+    -moz-border-radius: 100%;
+    border-radius: 100%;
+    border: solid 1px black;
+    margin: 2% auto;
+    background-position: center;
+    background-size: auto 300px; }
   .project-icon .project-title {
     background-color: white;
     position: relative;
     text-align: center;
-    top: 225px;
+    top: -100px;
     border-radius: 5px;
-    border: 2px solid black;
+    border: 1px solid black;
     box-shadow: 1px 1px 5px 1px #333333;
     width: 120%;
     left: -10%; }

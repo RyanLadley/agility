@@ -1,8 +1,9 @@
-app.controller('createCardController', function($scope, $routeParams, postRequestService){
+app.controller('createCardController', function($scope, $routeParams, $cookies, postRequestService){
     
     //Basic Variables every Card Has
     $scope.newCard =
     {
+        cardProject: $cookies.get('project'),
         cardIndex: "",
         cardName: "",
         cardType: $routeParams.cardType,
@@ -12,7 +13,7 @@ app.controller('createCardController', function($scope, $routeParams, postReques
         userId: 0,
         cardStatus: "Open",
         cardDescription: "",
-        epicId: "",
+        epicId: "0",
         epicBackgroundColor: "#ffffff", //Only populated igf card is an epic
         epicForegroundColor: "#000000", //Only populated igf card is an epic
         steps: [] //Only populated if card is standard
@@ -56,7 +57,7 @@ app.controller('createCardController', function($scope, $routeParams, postReques
 
     //Retrieve all data for drop down menus from api (Users, Statuses, and Active Epics)
     $scope.epics = [{id :0 , name: "None"}]
-    postRequestService.request('/api/page/create/card', $scope.newCard).then(function(request){
+    postRequestService.request('/api/page/create/card/project/' +$cookies.get('project')).then(function(request){
             $scope.newCard.cardIndex = request.data.response.card_index;
             $scope.statuses = request.data.response.statuses;
 

@@ -38,6 +38,26 @@ app.directive('epicLabel', function() {
        templateUrl: '/res/components/directives/epic-label/epic-label.template.html'
     };
 })
+app.directive('imageUpload', function () {
+    return {
+        restrict: 'A',
+        scope: {
+            image: '='
+        },
+
+        link: function (scope, element, attrs) {
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                scope.image = event.target.result;
+                scope.$apply();
+            }
+
+            element.on('change', function() {
+                reader.readAsDataURL(element[0].files[0]);
+            });
+        }
+    };
+});
 app.directive('openSprint', function() {
     return{
         restrict: 'E',
@@ -58,7 +78,7 @@ app.directive('projectImage', function() {
         restrict: 'E',
         //controller: 'projectImageController',
         scope: {
-            card: '='
+            project: '='
         },
        templateUrl: '/res/components/directives/project-image/project-image.template.html'
     };

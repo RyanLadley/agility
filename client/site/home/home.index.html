@@ -12,10 +12,13 @@
                 <a href = "/create/card/Standard"> Create a New Card </a>
                 <a href = "/create/card/Epic"> Add a New Epic </a>
                 <p ng-click = "confirmSprintClosure()" ng-if = "sprint.id != 'None'"> Close Current Sprint <p>
-                <p ng-click = "displayOpenSprint = !displayOpenSprint" ng-if = "sprint.id == 'None'"> Open New Sprint</p>
+                <p ng-click = "toggleOpenSprint()" ng-if = "sprint.id == 'None'"> Open New Sprint</p>
+                <a href = "/select/project"> Select Existing Project </a>
+                <a href = "/create/project"> Start a New Project </a> 
+                <p ng-click = "logout()">Logout</p>
             </div>
             <div class = "project-image">
-                <project-image></project-image>
+                <project-image project = 'project'></project-image>
             </div>
         </div>
         <div class = "cards-assigned">

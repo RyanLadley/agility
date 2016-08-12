@@ -1,0 +1,29 @@
+<div class = "create-project-page">
+    <div class = "create-project-content">
+        <div class = "create-project-header">
+            <h1 class = "card-index">Start A New Project</h1>
+        </div>
+        
+        <div class = "create-section create-project-left">
+            <project-image project = 'project'></project-image>
+        </div>
+
+        <div class = "create-project-right">
+            <div class = "create-section">
+                <h3>Project Name</h3>
+                <input type="text" ng-model = "project.name">
+            </div>
+            <div class = "create-section">
+                <h3>Project Designator</h3>
+                <input type="text" ng-model = "project.designator" placeholder="Maximum 5 characters" maxlength="5">
+            </div>
+            <div class = "create-section">
+                <h3>Project Image</h3>
+                <input type = "file" image-upload image = "project.image" > 
+            </div>
+            <div class = "create-section">
+                <button class ="create-project-submit" ng-click = "submit()">Start the project!</button> 
+            </div>
+        </div>
+    </div>
+</div>

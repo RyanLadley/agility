@@ -10,10 +10,10 @@ import api.core.response as response
 import json
 
 
-@workflow.route('/epics/get/active', methods = ['POST'])
-def get_active_epics():
+@workflow.route('/epics/get/active/project/<project_id>', methods = ['POST'])
+def get_active_epics(project_id):
 
-    epics = card_select.active_epics()
+    epics = card_select.active_epics(project_id)
 
     serialized_epics = []
     for epic in epics:
@@ -21,10 +21,11 @@ def get_active_epics():
 
     return response.success(serialized_epics)
 
-@workflow.route('/epics/get/active/labels', methods = ['POST'])
-def get_active_epic_labels(api_response = False):
 
-    epics = card_select.active_epic_labels()
+@workflow.route('/epics/get/active/labels/project/<project_id>', methods = ['POST'])
+def get_active_epic_labels(project_id, api_response = False):
+
+    epics = card_select.active_epic_labels(project_id)
 
     serialized_epics = []
     for epic in epics:

@@ -1,6 +1,6 @@
-app.controller('sprintController', function($scope, $location, postRequestService){
+app.controller('sprintController', function($scope, $location, $cookies, postRequestService){
     
-    postRequestService.request('/api/sprint/get/current_with_cards').then(function(request){
+    postRequestService.request('/api/sprint/get/current_with_cards/project/' +$cookies.get('project')).then(function(request){
         $scope.sprint = request.data.response
     })
 

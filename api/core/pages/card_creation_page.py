@@ -12,27 +12,23 @@ import api.core.response as response
 
 import json
 
-@page.route('/create/card', methods = ['POST'])
-def initialize_creation_page():
-    index = get_next_index();
+@page.route('/create/card/project/<project_id>', methods = ['POST'])
+def initialize_creation_page(project_id):
+    index = get_next_index(project_id);
     statuses = get_statuses();
     users = get_users();
-    epics = get_epics();
+    epics = get_epics(project_id);
 
     data = '{{"card_index" : "{index}", "statuses" : {statuses} , "users" : {users}, "epics": {epics} }}'.format(
         index = index, statuses = statuses, users = users, epics = epics)
     
-    print(data)
     return response.success(json.loads(data))
 
 
-def get_next_index():
+def get_next_index(project_id):
 
-    project_designator = "ABC"
-    current_number = (card_select.current_project_number(project_designator))['proj_number']
-    new_number = current_number + 1
+    index = card_select.next_card_index(project_id)
 
-    index = project_designator+ "-" +str(new_number)
     return index
 
 
@@ -49,9 +45,9 @@ def get_users():
     return json.dumps(serialized_users)
 
 
-def get_epics():
+def get_epics(project_id):
 
-    epics = epic_workflow.get_active_epic_labels(api_response = False)
+    epics = epic_workflow.get_active_epic_labels(project_id, api_response = False)
     return json.dumps(epics)
 
 

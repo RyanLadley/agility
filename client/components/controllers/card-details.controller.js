@@ -1,5 +1,8 @@
-app.controller('cardDetailsController', function($scope, $routeParams, postRequestService){
-    postRequestService.request('/api/get/card/' +$routeParams.cardId).then(function(request){
+app.controller('cardDetailsController', function($scope, $routeParams, $cookies, postRequestService){
+    
+    //api call is "/api/get/card/<card_index>/project/<project_id>"
+    var initApiCall = '/api/get/card/' +$routeParams.cardId +'/project/'+$cookies.get('project')
+    postRequestService.request(initApiCall).then(function(request){
         $scope.card = request.data.response;
     })
 
@@ -121,7 +124,7 @@ app.controller('cardDetailsController', function($scope, $routeParams, postReque
     $scope.saveSteps = function(){
         // url = /api/card/<cardID>/update/steps'
         var apiUrl = '/api/card/'+$scope.card.id +'/update/steps';
-
+        
         postRequestService.request(apiUrl, $scope.updatedSteps).then(function(request){
             $scope.card.steps = request.data.response;
             $scope.editSteps = false;
@@ -132,7 +135,7 @@ app.controller('cardDetailsController', function($scope, $routeParams, postReque
     var getSelections = function(){
         if (!$scope.users || !$scope.statuses || !$scope.epic){
             $scope.epics = [$scope.card.epic];
-            postRequestService.request('/api/page/create/card', $scope.newCard).then(function(success){
+            postRequestService.request('/api/page/create/card/project/' +$cookies.get('project')).then(function(success){
                 $scope.statuses = success.data.response.statuses;
 
                 unassigned = [{'id' : 0 ,'first_name' : 'Unassigned'}]

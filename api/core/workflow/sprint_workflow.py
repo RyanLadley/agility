@@ -17,12 +17,12 @@ import api.core.response as response
 import json
 
 
-@workflow.route('/sprint/get/current_with_cards', methods = ['POST'])
-def get_current_sprint_with_cards():
+@workflow.route('/sprint/get/current_with_cards/project/<project_id>', methods = ['POST'])
+def get_current_sprint_with_cards(project_id):
     #try:
 
-        sprint = sprint_select.current_sprint()
-        standard_cards = card_select.standard_cards_from_sprint(sprint.id)
+        sprint = sprint_select.current_sprint(project_id)
+        standard_cards = card_select.standard_cards_from_sprint(sprint)
 
         for card in standard_cards:
             sprint.add_card(card)
@@ -35,10 +35,10 @@ def get_current_sprint_with_cards():
 
 
 
-@workflow.route('/sprint/get/current', methods = ['POST'])
-def get_current_sprint(api_response = True):
+@workflow.route('/sprint/get/current/project/<project_id>', methods = ['POST'])
+def get_current_sprint(project_id, api_response = True):
 
-    sprint = sprint_select.current_sprint()
+    sprint = sprint_select.current_sprint(project_id)
 
     if api_response:
         return response.success(json.dumps(sprint.serialize()))
@@ -46,10 +46,10 @@ def get_current_sprint(api_response = True):
         return sprint.serialize()
 
 
-@workflow.route('/sprint/close', methods = ['POST'])
-def close_current_sprint():
+@workflow.route('/sprint/close/project/<project_id>', methods = ['POST'])
+def close_current_sprint(project_id):
 
-    response = sprint_update.close_current_sprint()
+    response = sprint_update.close_current_sprint(project_id)
     
     return response
 

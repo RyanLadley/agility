@@ -1,0 +1,67 @@
+<!--Feel Free to change/add/remove class names on anything here and rearange the div's to any way you would like. 
+Dont change the "ng-model", "ng-click", and "name" porameters though, they are for tha javascript.
+Also, don't move inputs and buttons outside of the <form> that are in. Everything else is fair game
+The {{failureMessage.*}} will only be visible if there is is an error in registering or login.
+Shoot me a text or call if you have a question
+
+This might be a bit confusing, feel free to ask me anything. Remember, dumb questions are encouraged
+
+Oh and you might download a text editor called 'Sublime'. It has syntax highlighting which makes life a bit easier-->
+
+
+<div class = "login-page">
+
+    <div class = "login-page-content">
+        <div class = "register">
+            <form name = "registerForm" ng-controller="registerController" ng-submit = "submit()">
+                <h2 class = "section-label">New? Register! It's Free!</h2>
+                <p>{{failureMessage}}</p>
+                <div class = "register-section">
+                    <h3>Email</h3>
+                    <input type="email" name = "emailInput" ng-model = "register.email" placeholder="Email">
+                </div>
+                <div class = "register-section">
+                    <h3>First Name</h3>
+                    <input type="text" ng-model = "register.firstName" placeholder="First Name">
+                </div>
+                <div class = "register-section">
+                    <h3>Last Name</h3>
+                    <input type="text" ng-model = "register.lastName" placeholder= "Last Name">
+                </div>
+                <div class = "register-section">
+                    <h3>Password</h3>
+                    <input type="password" ng-model = "register.password" placeholder= "Password">
+                </div>
+                <div class = "register-section">
+                    <h3>Re-type Password</h3>
+                    <input type="password" ng-model = "passwordCheck" placeholder = "Re-Password">
+                </div>
+
+                <div class ="register-section">
+                    <button class = "register-button" type = "submit"> Register </button>
+                </div>
+            </form>
+        </div>
+
+
+        <div class = "login">
+            <form name = "loginForm" ng-controller="loginController" ng-submit = "submit()">
+                <h2 class = "section-label"> Returning? Sign In</h2>
+                <p>{{failureMessage}}</p>
+                <div class = "login-section">
+                    <h3>Email</h3>
+                    <input type="email" name = "loginEmail" ng-model = "login.email" placeholder="Email">
+                </div>
+                <div class = "login-section">
+                    <h3>Password</h3>
+                    <input type="password" ng-model = "login.password" placeholder="Password">
+                </div>
+
+                <div class ="login-section">
+                    <button class = "login-button" type = "submit"> Log In </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

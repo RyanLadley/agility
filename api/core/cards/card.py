@@ -20,6 +20,7 @@ class Card:
         card.updated = form.get('card_updated')
         card.points = form.get('card_points')
         card.description = form.get('card_description')
+        card.project = form.get('card_project')
         
         card.type =  card._get_type_from_form(form)
         card.status = card._get_status_from_form(form)
@@ -74,7 +75,7 @@ class Card:
     def _get_index_from_form(self, form):
 
         try:
-            return form.get('card_index') or (form.get('card_proj_designator') + "-" + str(form.get('card_proj_number')))
+            return form.get('card_index') or (form.get('card_proj_designator') + "-" + str(form.get('card_proj_number') or 1))
         except TypeError:
             return None
 
