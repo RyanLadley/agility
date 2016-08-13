@@ -10,12 +10,18 @@ app.controller('openSprintController', function($scope,$location, $route, $cooki
     }
 
     $scope.cancel = function(){
-        $location.url("/")
-        $route.reload() //TODO make it so this is not neccisary
+        if($location.path() ==="/"){
+            $route.reload()
+        }
+        else{
+            $location.url("/")
+        }
     }
 
     $scope.open = function(){
-        postRequestService.request('/api/sprint/open', $scope.sprint)
+        postRequestService.request('/api/sprint/open', $scope.sprint).then(function(request){
+            $route.reload();
+        })
     }
 });
     

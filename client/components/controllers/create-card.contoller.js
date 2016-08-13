@@ -1,4 +1,4 @@
-app.controller('createCardController', function($scope, $routeParams, $cookies, postRequestService){
+app.controller('createCardController', function($scope, $routeParams, $cookies, $location, postRequestService){
     
     //Basic Variables every Card Has
     $scope.newCard =
@@ -74,7 +74,7 @@ app.controller('createCardController', function($scope, $routeParams, $cookies, 
     //Sent on users pressing of the "Create" button
     $scope.createCard = function(){
         postRequestService.request('/api/create/card', $scope.newCard).then(function(request){
-            console.log("Create Card: You Probably Want to do something here");
+            $location.url("/card/" + $scope.newCard.cardIndex);
         });
     }
 

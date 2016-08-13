@@ -1,7 +1,7 @@
 from api.DAL.data_context.database_connection import DatabaseConnection
 
 @DatabaseConnection
-def create_project(project, cursor = None):
+def create_project(project, user_id, cursor = None):
 
     cursor.execute('''
         INSERT project(
@@ -31,5 +31,14 @@ def create_project(project, cursor = None):
                 %(file_name)s,
                 %(file_type)s);''',
         {'project_id': project.id, 'folder': project.image.folder, 'file_name' : project.image.file_name, 'file_type' : project.image.type})
+
+    cursor.execute('''
+        INSERT user_projects(
+                user_id,
+                project_id)
+            VALUES(
+                %(user_id)s,
+                %(project_id)s);''',
+        {'user_id': user_id, 'project_id': project.id})
 
     return project

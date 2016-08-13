@@ -1,16 +1,14 @@
 app.controller('loginController', function($scope, $rootScope, $cookies, $location, postRequestService){
     $scope.login = {}
     $scope.submit = function(){
-        console.log($scope.login)
         if(validEmail() && validPassword() ){
             postRequestService.request("/api/admin/login", $scope.login).then(function(request){
                 if(request.data.status === "success"){
-                    var now = new Date()
-                    var oneYear = new Date(now.getFullYear()+1, now.getMonth(), now.getDate());
-                    $cookies.putObject('token', request.data.response, {'expires': oneYear})
+                    console.log(request)
                     $location.url("/")
                 }
                 else{
+                    console.log(request)
                     $scope.failureMessage = request.data.response;
                 }
             });

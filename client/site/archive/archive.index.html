@@ -1,0 +1,30 @@
+<div class = "archive-page">
+    <div class = "archive-header listing-header">
+        <h1 class = "archive-title listing-title" >Project Archive</h1>
+    </div>
+    <div>
+        <table style="width:100%">
+            <tr class = "table-header">
+                <th class = "card-index">Index</th>
+                <th class = "card-name">Name</th>
+                <th class = "card-type">Type</th>
+                <th class = "card-epic">Epic</th>
+                <th class = "card-poc">Point of Contact</th>
+                <th class = "card-status">Status</th>
+                <th class = "card-points">Points</th>
+            </tr>
+            <tr class = "archive-row" ng-repeat = "card in archive" ng-click = "viewCard(card.index)">
+                <td>{{card.index}}</td>
+                <td>{{card.name}}</td>
+                <td class = "{{card.type}}-card-header">{{card.type}}</td>
+                <td>
+                    <epic-label epic = "card.epic"></epic-label>
+                </td>
+                <td>{{card.poc.first_name + ' ' + card.poc.last_name}}</td>
+                <td class = "status-{{card.status}}">{{card.status}}</td>
+                <td>{{card.points}}</td>
+            </tr>
+        </table>
+    </div>
+    
+</div>

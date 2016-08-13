@@ -4,7 +4,6 @@ app.controller('backlogController', function($scope, $location, $cookies, postRe
     })
 
     $scope.viewCard = function(cardIndex){
-        console.log("fired")
         $location.url('/card/' +cardIndex);
     }
 

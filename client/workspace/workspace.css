@@ -45,8 +45,8 @@
       .sidebar-container .sidemenu .sidemenu-items:hover {
         background-color: #e1e1e1; }
     .sidebar-container .sidemenu .sidebar-info {
-      padding-top: 45px;
-      padding-bottom: 45px; }
+      padding: 0;
+      height: 140px; }
     .sidebar-container .sidemenu .selected {
       background-color: #b9b9b9;
       color: black; }
@@ -83,6 +83,19 @@
 .content {
   margin-left: 50px;
   postion: relative; }
+
+.sidebar-info-template {
+  height: 100%;
+  display: inline-block;
+  position: relative; }
+  .sidebar-info-template h2 {
+    margin: 0 90px; }
+  .sidebar-info-template img {
+    position: absolute;
+    top: 8px;
+    left: 55px;
+    width: 35px;
+    height: auto; }
 
 .home-page {
   margin: 1% 3%; }
@@ -173,7 +186,7 @@ card-two-sided {
     color: black;
     box-shadow: 2px 2px 2px 2px #888888;
     padding: 10px;
-    border-style: solid;
+    border: 1px solid;
     height: 200px;
     width: 300px;
     background-color: white;
@@ -224,7 +237,7 @@ card-two-sided {
     color: black;
     box-shadow: 2px 2px 2px 2px #888888;
     padding: 10px;
-    border-style: solid;
+    border: 1px solid;
     height: 200px;
     width: 300px;
     background-color: white;
@@ -249,7 +262,10 @@ card-two-sided {
         float: right;
         margin: 5px 0 0 0; }
     card-two-sided > card-back .description {
-      margin: 0; }
+      margin: 0;
+      height: 140px;
+      overflow: hidden;
+      white-space: pre-wrap; }
     card-two-sided > card-back .card-foot {
       position: absolute;
       bottom: 0;
@@ -374,7 +390,10 @@ card-two-sided.card-back > card-back {
     .details-body .details-left:hover .edit-icon-confirm, .details-body .details-left:hover .edit-icon-cancel {
       float: right; }
     .details-body .details-left .card-description {
-      max-height: 95%; }
+      background: #F9F9F9;
+      height: 325px;
+      white-space: pre-wrap;
+      overflow: auto; }
   .details-body .details-right {
     position: relative;
     display: inline-block;
@@ -673,10 +692,19 @@ card-two-sided.card-back > card-back {
   .backlog-page .backlog-row {
     cursor: pointer; }
 
+.archive-page {
+  margin: 3%;
+  min-width: 750px; }
+  .archive-page .archive-header {
+    display: inline-block; }
+  .archive-page .archive-row {
+    cursor: pointer; }
+
 body {
   overflow-x: auto;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  font-family: 'PT Sans Narrow', sans-serif; }
 
 .section-label {
   width: 100%;

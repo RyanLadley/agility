@@ -23,6 +23,7 @@ def res(resource_path):
 @client_side.route('/list/epics')
 @client_side.route('/list/sprint/current')
 @client_side.route('/list/backlog')
+@client_side.route('/list/archive')
 @client_side.route('/select/project')
 @client_side.route('/create/project')
 @client_side.route('/login')

@@ -10,7 +10,7 @@ $card-padding: 10px;
     color: black;
     box-shadow:2px 2px 2px 2px #888888;
     padding: $card-padding;
-    border-style: solid;
+    border: 1px solid;
     height: $card-height;
     width: $card-width;
     background-color: white;
@@ -122,7 +122,11 @@ card-two-sided{
 
         .description{
             margin:0;
+            height: 140px;
+            overflow: hidden;
+            white-space: pre-wrap;
         }
+
         .card-foot{
             position: absolute;
             bottom: 0;

@@ -1,11 +1,11 @@
 app.controller('sidebarController', function($scope, $location){
   
-    $scope.abs
 
     $scope.icons = {
         epic: false,
         sprint: false,
-        backlog: false
+        backlog: false,
+        archive: false
     }
 
     $scope.expand = false;
@@ -48,6 +48,8 @@ app.controller('sidebarController', function($scope, $location){
         }
         else if(path === "/list/backlog"){
             $scope.icons.backlog = true;
+        }else if(path === "/list/archive"){
+            $scope.icons.archive = true;
         };
     });
 });

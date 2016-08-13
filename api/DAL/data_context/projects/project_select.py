@@ -8,7 +8,7 @@ import json
 
 
 @DatabaseConnection
-def projects_for_user(cursor = None):
+def projects_for_user(user_id, cursor = None):
 
     cursor.execute("""
                 SELECT  project.id as proj_id, 
@@ -18,9 +18,16 @@ def projects_for_user(cursor = None):
                         project_image.file_name as image_file_name,
                         project_image.file_type as image_file_type
                     from project
-                    LEFT JOIN project_image ON project_image.project_id = project.id""")
+                    LEFT JOIN project_image ON project_image.project_id = project.id
+                    WHERE project.id IN 
+                        (
+                            SELECT distinct project_id
+                                from user_projects
+                            where user_id = %(user_id)s
+                        );""",
+                {'user_id': user_id})
 
-    results = cursor.fetchall()
+    results = cursor.fetchall() or {}
 
     projects = []
     for row in results:

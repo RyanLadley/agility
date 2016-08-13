@@ -35,6 +35,11 @@ app.config(['$routeProvider', '$locationProvider',
             controller: 'backlogController',
             templateUrl: '/res/site/backlog/backlog.index.html'
         }
+    ).when("/list/archive",
+        {
+            controller: 'archiveController',
+            templateUrl: '/res/site/archive/archive.index.html'
+        }
     ).when("/select/project",
         {
             controller: 'selectProjectController',

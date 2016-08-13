@@ -108,6 +108,13 @@ app.directive('setStepsPanel', function() {
        templateUrl: '/res/components/directives/set-steps-panel/set-steps-panel.template.html'
     };
 })
+app.directive('sidebarInfo', function() {
+    return{
+        restrict: 'E',
+        controller: 'sidebarInfoController',
+       templateUrl: '/res/components/directives/sidebar/sidebar-info.template.html'
+    };
+})
 app.directive('sidebar', function() {
     return{
         restrict: 'E',

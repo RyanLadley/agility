@@ -14,7 +14,6 @@ import api.core.admin.validate as validate
 import api.core.response as response
 import api.core.sanitize as sanitize
 
-
 import json
 
 @workflow.route('/admin/register', methods = ['POST'])
@@ -54,6 +53,7 @@ def login():
         validate.login(stored_credentials, provided_credentials)
     
     except InvalidCredential as invalid:
+        print(response.error(invalid.args[0]))
         return response.error(invalid.args[0])
 
     token = Token()
@@ -62,4 +62,4 @@ def login():
 
     user_update.token(token)
     
-    return response.success(token.serialize())
+    return response.add_token(token = token)

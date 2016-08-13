@@ -1,6 +1,10 @@
 app.controller('selectProjectController', function($scope, $cookies, $location, postRequestService){
     postRequestService.request('/api/project/get/user').then(function(request){
         $scope.projects = request.data.response
+        if($scope.projects.length < 1){
+            console.log("Fired")
+            $location.url("/create/project")
+        }
     });
 
     $scope.select = function(projectId){

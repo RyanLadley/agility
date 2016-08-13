@@ -15,8 +15,9 @@ app.run(['$rootScope', '$location', '$cookies', function($rootScope, $location, 
         }
         else{
             $rootScope.isSignedIn = true;
+            checkProject($cookies.get('project'))
         }
-    })
+    });
 
     //If the user is logged out, the only page they can view is the login page
     //On route change, check to make sure the user is signed in
@@ -25,12 +26,23 @@ app.run(['$rootScope', '$location', '$cookies', function($rootScope, $location, 
             $location.url("/login")
         }
     })
-}]);;app.service('postRequestService', ['$http', function($http){
+
+    var checkProject = function(project){
+        console.log(project)
+        //If the user has not selected a project and are not in the process of slecting or creating one, 
+        //Move the, to slect project screen
+        if(!project && ($location.path() !== '/select/project' && $location.path() !== '/create/project')){
+            console.log($location.path() !== '/create/project')
+            $location.url("/select/project")
+        }
+}
+}]);;app.service('postRequestService', ['$http', '$cookies', function($http, $cookies){
 
     //Http post request wrapper to send data to api.
     this.request = function(url, payload) {
         var form = new FormData()
         form.append("payload", JSON.stringify(payload))
+        form.append("token", JSON.stringify($cookies.getObject('token')))
 
         return $http.post(url, form, {
             withCredentials : false,
@@ -40,12 +52,39 @@ app.run(['$rootScope', '$location', '$cookies', function($rootScope, $location, 
             transformRequest : angular.identity
         }).then(
         function(success){
-            console.log(success);
-            return success;
+            //Normal Operation, update token after request
+            console.log(success)
+            if(success.data.status === "success"){
+                var now = new Date()
+                var oneYear = new Date(now.getFullYear()+1, now.getMonth(), now.getDate());
+                $cookies.putObject('token', success.data.token, {'expires': oneYear});
+            }
+            else{
+                //User tried to access a project they do not have permission to view
+                //Burn Them!! Or just remove the project token. Which ever
+                if(success.data.response === "Project Access Denied"){
+                    var now = new Date()
+                    var oneYear = new Date(now.getFullYear()+1, now.getMonth(), now.getDate());
+                    $cookies.putObject('token', success.data.token, {'expires': oneYear});
+                    $cookies.remove('project')
+                }
+                //User token has expireed. Log them out
+                //They don't need to be burned... yet. 
+                else{
+                    if(success.data.response === "Invalid User"){
+                        $cookies.remove('token')
+                    }
+                }
+            }
+            return success
         }, 
         //Error
         function(error){
+            console.log(error)
             console.log("postRequest: Error");
+            if(error.data.response === "Invalid User"){
+                $cookies.remove('token')
+            }
         });
     };
 }]);;app.config(['$routeProvider', '$locationProvider', 
@@ -85,6 +124,11 @@ app.run(['$rootScope', '$location', '$cookies', function($rootScope, $location, 
             controller: 'backlogController',
             templateUrl: '/res/site/backlog/backlog.index.html'
         }
+    ).when("/list/archive",
+        {
+            controller: 'archiveController',
+            templateUrl: '/res/site/archive/archive.index.html'
+        }
     ).when("/select/project",
         {
             controller: 'selectProjectController',
@@ -120,8 +164,9 @@ app.run(['$rootScope', '$location', '$cookies', function($rootScope, $location, 
     $scope.cardId = ''
     $scope.add = function(){
         api_url = '/api/sprint/' +$scope.sprint.id + '/add/card/' + $scope.cardId;
-        console.log(api_url)
-        postRequestService.request(api_url)
+        postRequestService.request(api_url).then(function(request){
+            $route.reload();
+        })
     }
 }])
     
@@ -131,13 +176,22 @@ app.controller('adminController', ['$scope', '$rootScope', '$location', function
         $location.url("/")
     }
 }]);
+app.controller('archiveController', ['$scope', '$location', '$cookies', 'postRequestService', function($scope, $location, $cookies, postRequestService){
+    postRequestService.request('/api/cards/get/archive/project/' +$cookies.get('project')).then(function(success){
+        $scope.archive = success.data.response;
+    })
+
+    $scope.viewCard = function(cardIndex){
+        $location.url('/card/' +cardIndex);
+    }
+
+}]);
 app.controller('backlogController', ['$scope', '$location', '$cookies', 'postRequestService', function($scope, $location, $cookies, postRequestService){
     postRequestService.request('/api/cards/get/backlog/project/' +$cookies.get('project')).then(function(success){
         $scope.backlog = success.data.response;
     })
 
     $scope.viewCard = function(cardIndex){
-        console.log("fired")
         $location.url('/card/' +cardIndex);
     }
 
@@ -299,7 +353,7 @@ app.controller('cardController', ['$scope', function($scope){
     }
 
 }]);
-app.controller('createCardController', ['$scope', '$routeParams', '$cookies', 'postRequestService', function($scope, $routeParams, $cookies, postRequestService){
+app.controller('createCardController', ['$scope', '$routeParams', '$cookies', '$location', 'postRequestService', function($scope, $routeParams, $cookies, $location, postRequestService){
     
     //Basic Variables every Card Has
     $scope.newCard =
@@ -375,7 +429,7 @@ app.controller('createCardController', ['$scope', '$routeParams', '$cookies', 'p
     //Sent on users pressing of the "Create" button
     $scope.createCard = function(){
         postRequestService.request('/api/create/card', $scope.newCard).then(function(request){
-            console.log("Create Card: You Probably Want to do something here");
+            $location.url("/card/" + $scope.newCard.cardIndex);
         });
     }
 
@@ -436,15 +490,22 @@ app.controller('homeController', ['$scope', '$cookies', 'postRequestService', fu
     {
         cardIndex: 'abc-123',
         cardName: "First Card",
-        cardType: "card",
+        cardType: "Standard",
         user: "Chuch Jones",
         message: "Te pro legimus gloriatur referrentur, altera impedit gloriatur eu quo, admodum consulatu id vim. Eu homero tempor eos, mea laoreet consetetur an. Vim diam oporteat moderatius ad. Mei cu mundi fabellas, usu mundi sanctus albucius ea. Eam at aeque erroribus omittantur, eam simul mediocritatem no, nulla dicant ornatus eu mei."
     },
     {
         cardIndex: 'abc-456',
         cardName: "A longer Title",
-        cardType: "card",
+        cardType: "Standard",
         user: "Lama Lee",
+        message: "Te pro legimus gloriatur referrentur, altera impedit gloriatur eu quo, admodum consulatu id vim. Eu homero tempor eos, mea laoreet consetetur an. Vim diam oporteat moderatius ad. Mei cu mundi fabellas, usu mundi sanctus albucius ea. Eam at aeque erroribus omittantur, eam simul mediocritatem no, nulla dicant ornatus eu mei."
+    },
+    {
+        cardIndex: 'abc-789',
+        cardName: "Wow, look at this long title.",
+        cardType: "Epic",
+        user: "Tim Tom",
         message: "Te pro legimus gloriatur referrentur, altera impedit gloriatur eu quo, admodum consulatu id vim. Eu homero tempor eos, mea laoreet consetetur an. Vim diam oporteat moderatius ad. Mei cu mundi fabellas, usu mundi sanctus albucius ea. Eam at aeque erroribus omittantur, eam simul mediocritatem no, nulla dicant ornatus eu mei."
     }];  
 
@@ -456,13 +517,14 @@ app.controller('homeController', ['$scope', '$cookies', 'postRequestService', fu
         $scope.cards = request.data.response.cards;
         $scope.sprint = request.data.response.sprint
         $scope.project = request.data.response.project
-        console.log($scope.project.name)
+        console.log($scope.sprint)
     })
     
     $scope.confirmSprintClosure = function(){
         var confirmed = confirm("Are you sure you want to close the sprint?\nAny card not closed will be moved to the backlog.")
         if(confirmed){
-            postRequestService.request('/api/sprint/close/project/' +$cookies.get('project')).then(function(success){})
+            ///api/sprint/sprint_id/close/project/project_id
+            postRequestService.request('/api/sprint/close/' +$scope.sprint.id + '/project/' +$cookies.get('project')).then(function(success){})
         }
 
     }
@@ -479,16 +541,14 @@ app.controller('homeController', ['$scope', '$cookies', 'postRequestService', fu
 app.controller('loginController', ['$scope', '$rootScope', '$cookies', '$location', 'postRequestService', function($scope, $rootScope, $cookies, $location, postRequestService){
     $scope.login = {}
     $scope.submit = function(){
-        console.log($scope.login)
         if(validEmail() && validPassword() ){
             postRequestService.request("/api/admin/login", $scope.login).then(function(request){
                 if(request.data.status === "success"){
-                    var now = new Date()
-                    var oneYear = new Date(now.getFullYear()+1, now.getMonth(), now.getDate());
-                    $cookies.putObject('token', request.data.response, {'expires': oneYear})
+                    console.log(request)
                     $location.url("/")
                 }
                 else{
+                    console.log(request)
                     $scope.failureMessage = request.data.response;
                 }
             });
@@ -525,12 +585,18 @@ app.controller('openSprintController', ['$scope', '$location', '$route', '$cooki
     }
 
     $scope.cancel = function(){
-        $location.url("/")
-        $route.reload() //TODO make it so this is not neccisary
+        if($location.path() ==="/"){
+            $route.reload()
+        }
+        else{
+            $location.url("/")
+        }
     }
 
     $scope.open = function(){
-        postRequestService.request('/api/sprint/open', $scope.sprint)
+        postRequestService.request('/api/sprint/open', $scope.sprint).then(function(request){
+            $route.reload();
+        })
     }
 }]);
     
@@ -597,6 +663,10 @@ app.controller('registerController', ['$scope', '$cookies', 'postRequestService'
 app.controller('selectProjectController', ['$scope', '$cookies', '$location', 'postRequestService', function($scope, $cookies, $location, postRequestService){
     postRequestService.request('/api/project/get/user').then(function(request){
         $scope.projects = request.data.response
+        if($scope.projects.length < 1){
+            console.log("Fired")
+            $location.url("/create/project")
+        }
     });
 
     $scope.select = function(projectId){
@@ -638,14 +708,17 @@ app.controller('setStepsPanelController', ['$scope', 'postRequestService', funct
     }
 
 }]);
+app.controller('sidebarInfoController', ['$scope', '$location', function($scope, $location){
+  
+}]);
 app.controller('sidebarController', ['$scope', '$location', function($scope, $location){
   
-    $scope.abs
 
     $scope.icons = {
         epic: false,
         sprint: false,
-        backlog: false
+        backlog: false,
+        archive: false
     }
 
     $scope.expand = false;
@@ -688,6 +761,8 @@ app.controller('sidebarController', ['$scope', '$location', function($scope, $lo
         }
         else if(path === "/list/backlog"){
             $scope.icons.backlog = true;
+        }else if(path === "/list/archive"){
+            $scope.icons.archive = true;
         };
     });
 }]);
@@ -810,6 +885,13 @@ app.directive('setStepsPanel', function() {
             statuses: '='
         },
        templateUrl: '/res/components/directives/set-steps-panel/set-steps-panel.template.html'
+    };
+})
+app.directive('sidebarInfo', function() {
+    return{
+        restrict: 'E',
+        controller: 'sidebarInfoController',
+       templateUrl: '/res/components/directives/sidebar/sidebar-info.template.html'
     };
 })
 app.directive('sidebar', function() {

@@ -7,6 +7,10 @@ import api.DAL.data_context.cards.card_select as card_select
 
 from api.core.enum.card_type import CardType
 
+from api.core.admin.authorize import authorize
+
+from api.core.admin.token import Token
+
 from api.core.cards.card import Card
 from api.core.cards.card import Step
 
@@ -17,6 +21,7 @@ import json
 
 
 @workflow.route('/create/card', methods = ['POST'])
+@authorize()
 def create_card():
     card_form = json.loads(request.form['payload'])
     card_form = sanitize.form_keys(card_form)
@@ -43,12 +48,15 @@ def create_card():
 
 
 @workflow.route('/get/cards/user/project/<project_id>', methods = ['POST'])
-def get_card_with_user_task(user_id, project_id, api_response = True):
+@authorize()
+def get_card_with_user_task(project_id, api_response = True):
 
-    user_json = '{"id" : "1", "name": "Ryan"}'
-    user = json.loads(user_json)
+    token_form = json.loads(request.form['token'])
+    token_form = sanitize.form_keys(token_form)
 
-    cards = card_select.card_with_user_task(user['id'], project_id)
+    token = Token.map_from_form(token_form)
+
+    cards = card_select.card_with_user_task(token.user_id, project_id)
 
     serialized_cards = serialize_array(cards)
 
@@ -60,6 +68,7 @@ def get_card_with_user_task(user_id, project_id, api_response = True):
 
 
 @workflow.route("/get/card/<card_index>/project/<project_id>", methods = ['POST'])
+@authorize()
 def get_card(card_index, project_id):
 
     card_refrence = Card()
@@ -79,7 +88,8 @@ def get_card(card_index, project_id):
 
 
 @workflow.route("/get/card/name/<card_id>", methods = ['POST'])
-def get_card_name(card_id):
+@authorize()
+def get_card_name(card_id, api_response = True):
 
     card = card_select.card_name(card_id)
     
@@ -87,7 +97,8 @@ def get_card_name(card_id):
 
 
 @workflow.route("/get/card/details/<card_id>", methods = ['POST'])
-def get_card_details(card_id):
+@authorize()
+def get_card_details(card_id, api_response = True):
 
     card = card_select.card_details(card_id)
 
@@ -95,7 +106,8 @@ def get_card_details(card_id):
 
 
 @workflow.route("/get/card/description/<card_id>", methods = ['POST'])
-def get_card_description(card_id):
+@authorize()
+def get_card_description(card_id, api_response = True):
 
     card = card_select.card_description(card_id)
 
@@ -103,6 +115,7 @@ def get_card_description(card_id):
 
 
 @workflow.route("/cards/get/backlog/project/<project_id>", methods = ['POST'])
+@authorize()
 def get_backlog(project_id):
 
     backlog = card_select.backlog(project_id)
@@ -112,7 +125,19 @@ def get_backlog(project_id):
     return response.success(serialized_backlog)
 
 
+@workflow.route("/cards/get/archive/project/<project_id>", methods = ['POST'])
+@authorize()
+def get_archive(project_id):
+
+    archive = card_select.archive(project_id)
+
+    serialized_archive = serialize_array(archive)
+    
+    return response.success(serialized_archive)
+
+
 @workflow.route("/card/<card_id>/update/name", methods = ['POST'])
+@authorize()
 def update_card_name(card_id):
 
     card_form = json.loads(request.form['payload'])
@@ -122,10 +147,11 @@ def update_card_name(card_id):
 
     card_update.name(card)
 
-    return get_card_name(card.id)
+    return get_card_name(card.id, api_response = False)
 
 
 @workflow.route("/card/<card_id>/update/description", methods = ['POST'])
+@authorize()
 def update_card_description(card_id):
 
     card_form = json.loads(request.form['payload'])
@@ -135,10 +161,11 @@ def update_card_description(card_id):
 
     card_update.description(card)
 
-    return get_card_description(card.id)
+    return get_card_description(card.id, api_response = False)
 
 
 @workflow.route("/card/<card_id>/update/details", methods = ['POST'])
+@authorize()
 def update_card_details(card_id):
 
     card_form = json.loads(request.form['payload'])
@@ -149,10 +176,12 @@ def update_card_details(card_id):
 
     card_update.details(card)
 
-    return get_card_details(card.id)
+    
+    return get_card_details(card.id, api_response = False)
 
 
 @workflow.route("/card/<card_id>/update/steps", methods = ['POST'])
+@authorize()
 def update_card_steps(card_id):
 
     steps_form = json.loads(request.form['payload'])

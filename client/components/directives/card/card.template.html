@@ -18,7 +18,7 @@
 
         <card-back>
             <div class = "card-head {{card.type}}-card-header">
-                <h3 class = "name"> {{card.name}}</h3>
+                <h3 class = "name"> {{card.name| limitTo:30}}{{card.name.length > 30 ? '...' : ''}}</h3>
                 <p class = "points"> Points: {{card.points}}</p>
             </div>
             <p class = "description">{{card.description| limitTo:340}}{{card.description.length > 340 ? '...' : ''}}</p>

@@ -61,7 +61,10 @@
 
 
         .card-description{
-            max-height: 95%;
+            background: #F9F9F9;
+            height: 325px;
+            white-space: pre-wrap;
+            overflow: auto;
         }
     }
 

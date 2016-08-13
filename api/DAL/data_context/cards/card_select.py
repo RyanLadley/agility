@@ -149,7 +149,7 @@ def card_name(card_id, cursor = None):
 def card_details(card_id, cursor = None):
 
     cursor.execute("""
-                SELECT distinct  
+                SELECT DISTINCT  
                         card.status as card_status, 
                         card.points as card_points, 
                         user.id as user_id,
@@ -180,7 +180,7 @@ def card_details(card_id, cursor = None):
 def card_description(card_id, cursor = None):
 
     cursor.execute("""
-                SELECT distinct  
+                SELECT DISTINCT  
                         card_description.description as card_description
                     FROM card_description
                 WHERE card_description.card_id = %(card_id)s""",
@@ -217,9 +217,9 @@ def cards_assigned_to_epic(epic_id, cursor = None):
                     from card
                     JOIN project ON card.project = project.id
                     JOIN card_description ON card_description.card_id = card.id
-                    JOIN epic ON  epic.id = card.epic
-                    JOIN card AS epic_card ON epic_card.epic = epic.id
-                    JOIN user ON card.poc = user.id
+                    LEFT JOIN epic ON  epic.id = card.epic
+                    LEFT JOIN card AS epic_card ON epic_card.epic = epic.id
+                    LEFT JOIN user ON card.poc = user.id
                 WHERE   card.epic = %(epic_id)s AND
                         epic_card.type = 1 AND
                         card.type <> 1""",
@@ -250,6 +250,7 @@ def next_card_index(project_id, cursor = None):
     card = Card.map_from_form(result)
 
     return card.index
+
 
 @DatabaseConnection
 def standard_cards_from_sprint(sprint, cursor = None):
@@ -293,6 +294,7 @@ def standard_cards_from_sprint(sprint, cursor = None):
 
     return cards
 
+
 @DatabaseConnection
 def backlog(project_id, cursor = None):
 
@@ -321,6 +323,48 @@ def backlog(project_id, cursor = None):
                     LEFT JOIN card AS epic_card ON epic_card.epic = epic.id
                     LEFT JOIN user ON card.poc = user.id
                 WHERE card.sprint IS NULL AND 
+                      card.type <> 1 AND
+                      (epic_card.type = 1 OR card.epic = 0 OR card.epic IS NULL) AND
+                      card.project = %(project_id)s""",
+                      {'project_id': project_id})
+
+    results = cursor.fetchall()
+
+    cards = []
+    for row in results:
+        cards.append(Card.map_from_form(row))
+
+    return cards
+
+
+@DatabaseConnection
+def archive(project_id, cursor = None):
+
+    cursor.execute("""
+                SELECT  card.id as card_id, 
+                        project.designator as card_proj_designator, 
+                        card.proj_number as card_proj_number, 
+                        card.name as card_name, 
+                        card.type as card_type, 
+                        card.status as card_status, 
+                        card.points as card_points, 
+                        card_description.description as card_description, 
+                        user.id as user_id,
+                        user.first_name as user_first_name,
+                        user.last_name as user_last_name,
+                        card.created as card_created,
+                        card.updated as card_updated,
+                        epic.id as epic_id, 
+                        epic_card.name as epic_name, 
+                        epic.background_color as epic_background_color, 
+                        epic.foreground_color as epic_foreground_color
+                    from card
+                    JOIN card_description ON card_description.card_id = card.id
+                    JOIN project on card.project = project.id
+                    LEFT JOIN epic ON  card.epic = epic.id
+                    LEFT JOIN card AS epic_card ON epic_card.epic = epic.id
+                    LEFT JOIN user ON card.poc = user.id
+                WHERE card.status = 3 AND
                       card.type <> 1 AND
                       (epic_card.type = 1 OR card.epic = 0 OR card.epic IS NULL) AND
                       card.project = %(project_id)s""",

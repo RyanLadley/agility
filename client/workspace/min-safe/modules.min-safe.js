@@ -15,8 +15,9 @@ app.run(['$rootScope', '$location', '$cookies', function($rootScope, $location, 
         }
         else{
             $rootScope.isSignedIn = true;
+            checkProject($cookies.get('project'))
         }
-    })
+    });
 
     //If the user is logged out, the only page they can view is the login page
     //On route change, check to make sure the user is signed in
@@ -25,4 +26,14 @@ app.run(['$rootScope', '$location', '$cookies', function($rootScope, $location, 
             $location.url("/login")
         }
     })
+
+    var checkProject = function(project){
+        console.log(project)
+        //If the user has not selected a project and are not in the process of slecting or creating one, 
+        //Move the, to slect project screen
+        if(!project && ($location.path() !== '/select/project' && $location.path() !== '/create/project')){
+            console.log($location.path() !== '/create/project')
+            $location.url("/select/project")
+        }
+}
 }]);

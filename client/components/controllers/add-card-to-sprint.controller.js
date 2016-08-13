@@ -14,8 +14,9 @@ app.controller('addCardToSprintController', function($scope,$location, $route, $
     $scope.cardId = ''
     $scope.add = function(){
         api_url = '/api/sprint/' +$scope.sprint.id + '/add/card/' + $scope.cardId;
-        console.log(api_url)
-        postRequestService.request(api_url)
+        postRequestService.request(api_url).then(function(request){
+            $route.reload();
+        })
     }
 })
     
