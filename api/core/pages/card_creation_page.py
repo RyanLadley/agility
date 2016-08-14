@@ -51,6 +51,8 @@ def get_users(project_id):
 def get_epics(project_id):
 
     epics = epic_workflow.get_active_epic_labels(project_id, api_response = False)
+     #Add None to possible epics
+    epics.append({'background_color': '#ffffff', 'id': '0', 'foreground_color': '#000000', 'name': 'None'})
     return json.dumps(epics)
 
 

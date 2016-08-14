@@ -1,7 +1,7 @@
 {
-  "host": "REPLACE_ME",
-  "user": "REPLACE_ME",
-  "password": "REPLACE_ME",
-  "database": "REPLACE_ME",
-  "port" : "REPLACE_ME"
+  "host": "localhost",
+  "user": "root",
+  "password": "popper3",
+  "database": "ag_first",
+  "port" : "3306"
 }

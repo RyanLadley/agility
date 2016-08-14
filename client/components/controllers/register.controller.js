@@ -1,4 +1,4 @@
-app.controller('registerController', function($scope, $cookies, postRequestService){
+app.controller('registerController', function($scope, $cookies, $location, postRequestService){
     $scope.register = {}
    $scope.submit = function(){
 
@@ -6,7 +6,7 @@ app.controller('registerController', function($scope, $cookies, postRequestServi
 
             postRequestService.request("/api/admin/register", $scope.register).then(function(request){
                 if(request.data.status === "success"){
-                    console.log("Success!!")
+                    $location.url('/create/project')
                 }
                 else{
                     $scope.failureMessage = request.data.response

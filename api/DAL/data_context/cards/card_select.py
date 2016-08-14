@@ -39,12 +39,12 @@ def card_with_user_task(user_id, project_id, cursor = None):
                     JOIN card_description ON card_description.card_id = card.id
                     JOIN project on card.project = project.id
                     LEFT JOIN epic ON  epic.id = card.epic
-                    LEFT JOIN card AS epic_card ON epic_card.epic = epic.id
+                    LEFT JOIN card AS epic_card ON epic_card.epic = card.epic
+                                                AND epic_card.type = 1
                     LEFT JOIN user ON card.poc = user.id
                 WHERE 
                     card.project = %(project_id)s AND
-                    card.status <> 3 AND
-                    (epic_card.type = 1 OR card.epic = 0 OR card.epic IS NULL) AND (
+                    card.status <> 3 AND (
                     card.poc = %(user_id)s OR
                     card.id IN 
                         (
@@ -90,11 +90,11 @@ def card(project_id, proj_number, cursor = None):
                     JOIN card_description ON card_description.card_id = card.id
                     JOIN project on card.project = project.id
                     LEFT JOIN epic ON  epic.id = card.epic
-                    LEFT JOIN card AS epic_card ON epic_card.epic = epic.id
+                    LEFT JOIN card AS epic_card ON epic_card.epic = card.epic
+                                                AND epic_card.type = 1
                     LEFT JOIN user ON card.poc = user.id
                 WHERE   project.id = %(project_id)s AND 
-                        card.proj_number = %(num)s AND
-                        (epic_card.type = 1 OR card.epic = 0 OR card.epic IS NULL)""",
+                        card.proj_number = %(num)s""",
                 {'project_id': project_id , 'num': proj_number})
 
 
@@ -163,10 +163,10 @@ def card_details(card_id, cursor = None):
                         epic.foreground_color as epic_foreground_color
                     from card
                     LEFT JOIN epic ON  epic.id = card.epic
-                    LEFT JOIN card AS epic_card ON epic_card.epic = epic.id
+                    LEFT JOIN card AS epic_card ON epic_card.epic = card.epic
+                                                AND epic_card.type = 1
                     LEFT JOIN user ON card.poc = user.id
-                WHERE   card.id = %(card_id)s AND
-                        (epic_card.type = 1 OR card.epic = 0 OR card.epic IS NULL) = 1""",
+                WHERE   card.id = %(card_id)s""",
                 {'card_id': card_id})
 
     result = cursor.fetchone()
@@ -278,11 +278,11 @@ def standard_cards_from_sprint(sprint, cursor = None):
                     JOIN card_description ON card_description.card_id = card.id
                     JOIN project on card.project = project.id
                     LEFT JOIN epic ON  epic.id = card.epic
-                    LEFT JOIN card AS epic_card ON epic_card.epic = epic.id
+                    LEFT JOIN card AS epic_card ON epic_card.epic = card.epic
+                                                AND epic_card.type = 1
                     LEFT JOIN user ON card.poc = user.id
                 WHERE card.sprint = %(sprint_id)s AND
                       card.type = 0 AND
-                      (epic_card.type = 1 OR card.epic = 0 OR card.epic IS NULL) AND
                       card.project = %(project_id)s""",
                 {'sprint_id': sprint.id, 'project_id' : sprint.project})
 
@@ -320,11 +320,12 @@ def backlog(project_id, cursor = None):
                     JOIN card_description ON card_description.card_id = card.id
                     JOIN project on card.project = project.id
                     LEFT JOIN epic ON  card.epic = epic.id
-                    LEFT JOIN card AS epic_card ON epic_card.epic = epic.id
+                    LEFT JOIN card AS epic_card ON epic_card.epic = card.epic
+                                                AND epic_card.type = 1
                     LEFT JOIN user ON card.poc = user.id
                 WHERE card.sprint IS NULL AND 
                       card.type <> 1 AND
-                      (epic_card.type = 1 OR card.epic = 0 OR card.epic IS NULL) AND
+                      card.status <>3 AND
                       card.project = %(project_id)s""",
                       {'project_id': project_id})
 
@@ -362,11 +363,11 @@ def archive(project_id, cursor = None):
                     JOIN card_description ON card_description.card_id = card.id
                     JOIN project on card.project = project.id
                     LEFT JOIN epic ON  card.epic = epic.id
-                    LEFT JOIN card AS epic_card ON epic_card.epic = epic.id
+                    LEFT JOIN card AS epic_card ON epic_card.epic = card.epic
+                                                AND epic_card.type = 1
                     LEFT JOIN user ON card.poc = user.id
                 WHERE card.status = 3 AND
                       card.type <> 1 AND
-                      (epic_card.type = 1 OR card.epic = 0 OR card.epic IS NULL) AND
                       card.project = %(project_id)s""",
                       {'project_id': project_id})
 

@@ -10,11 +10,11 @@ class Image:
 
         image.parse_data_uri(form.get('image'))
 
-        image.folder = form.get('image_folder') or "0"
-        image.file_name = form.get('image_file_name') or"default"
+        image.folder = form.get('image_folder')
+        image.file_name = form.get('image_file_name')
         
         #image.type is either populated here or in data parse
-        image.type = form.get('image_file_type') or image.type or "jpg"
+        image.type = form.get('image_file_type') or image.type
 
         return image
 
@@ -46,11 +46,15 @@ class Image:
     def save_to_file_system(self, parent_url):
         """Saves the image to the file system by appending the internal relative url
         to the parent url provided"""
+        try:
+            file_url = parent_url + self.url()
 
-        file_url = parent_url + self.url()
+            with open((file_url), "wb") as file:
+                file.write(self.data)
 
-        with open((file_url), "wb") as file:
-            file.write(self.data)
+        except:
+            pass
+
 
     
     def serialize(self):

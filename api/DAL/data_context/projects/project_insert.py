@@ -16,8 +16,9 @@ def create_project(project, user_id, cursor = None):
     cursor.execute("""SELECT LAST_INSERT_ID();""")
     project.id = cursor.fetchone()['LAST_INSERT_ID()']
 
-    project.image.folder = str(int(project.id/100))
-    project.image.file_name = str(project.id%100)
+    if project.image.data: #Image has new data to write, so create new folder and file, otherwise defaults are used
+        project.image.folder = str(int(project.id/100))
+        project.image.file_name = str(project.id%100)
 
     cursor.execute('''
         INSERT project_image(

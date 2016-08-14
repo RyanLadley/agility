@@ -15,7 +15,6 @@ app.service('postRequestService', ['$http', '$cookies', function($http, $cookies
         }).then(
         function(success){
             //Normal Operation, update token after request
-            console.log(success)
             if(success.data.status === "success"){
                 var now = new Date()
                 var oneYear = new Date(now.getFullYear()+1, now.getMonth(), now.getDate());
@@ -42,8 +41,6 @@ app.service('postRequestService', ['$http', '$cookies', function($http, $cookies
         }, 
         //Error
         function(error){
-            console.log(error)
-            console.log("postRequest: Error");
             if(error.data.response === "Invalid User"){
                 $cookies.remove('token')
             }

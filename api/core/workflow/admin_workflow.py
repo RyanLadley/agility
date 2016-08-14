@@ -19,6 +19,9 @@ import json
 @workflow.route('/admin/register', methods = ['POST'])
 def register_user():
 
+    '''Called when adding a new user to the database. Makes sure that all information 
+    provided is valid(see individual validations for details) and hashes the password for storage'''
+
     credentials_form = json.loads(request.form['payload'])
     credentials_form = sanitize.form_keys(credentials_form)
 
@@ -37,11 +40,14 @@ def register_user():
 
     user_insert.new_user(credentials)
     
-    return response.success()
+    return login()
 
 
 @workflow.route('/admin/login', methods = ['POST'])
 def login():
+
+    '''Called when a user is loging in (shocker)
+    Checks the provided email and password with the values stored in the database'''
 
     credentials_form = json.loads(request.form['payload'])
     credentials_form = sanitize.form_keys(credentials_form)
@@ -53,7 +59,6 @@ def login():
         validate.login(stored_credentials, provided_credentials)
     
     except InvalidCredential as invalid:
-        print(response.error(invalid.args[0]))
         return response.error(invalid.args[0])
 
     token = Token()

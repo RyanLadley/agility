@@ -247,11 +247,6 @@ app.controller('createCardController', ['$scope', '$routeParams', '$cookies', '$
             $scope.epics[0].name = name;
         }
     });
-    //$scope.$watch($scope.newCard.epicForegroundColor, function(){
-    //    if(newCard.cardType == "Epic"){
-    //        $scope.epic.backgroundColor = $scope.newCard.epicForegroundColor;
-    //    }
-    //});
 
     //Watchs details direcive epic. This allows us to keep track
     //of which epic is assigned to card (if the card itself is not an Epic)
@@ -270,7 +265,6 @@ app.controller('createCardController', ['$scope', '$routeParams', '$cookies', '$
             $scope.users = unassigned.concat(request.data.response.users);
             $scope.newCard.cardPoc = 0;
 
-            
             $scope.epics = $scope.epics.concat(request.data.response.epics)
     });
     
@@ -451,7 +445,7 @@ app.controller('openSprintController', ['$scope', '$location', '$route', '$cooki
 }]);
     
    
-app.controller('registerController', ['$scope', '$cookies', 'postRequestService', function($scope, $cookies, postRequestService){
+app.controller('registerController', ['$scope', '$cookies', '$location', 'postRequestService', function($scope, $cookies, $location, postRequestService){
     $scope.register = {}
    $scope.submit = function(){
 
@@ -459,7 +453,7 @@ app.controller('registerController', ['$scope', '$cookies', 'postRequestService'
 
             postRequestService.request("/api/admin/register", $scope.register).then(function(request){
                 if(request.data.status === "success"){
-                    console.log("Success!!")
+                    $location.url('/create/project')
                 }
                 else{
                     $scope.failureMessage = request.data.response
@@ -530,22 +524,17 @@ app.controller('selectProjectController', ['$scope', '$cookies', '$location', 'p
 app.controller('setDetailsPanelController', ['$scope', 'postRequestService', function($scope, postRequestService){
     
     $scope.$watch('card.epicId', function(epicId){
+        //Iterate through all possible epics.
+        //If the epicId proived is matched, set that as selected and break.
         for (i = 0; i < $scope.epics.length; i++){
             if($scope.epics[i].id == epicId){
+                console.log($scope.epics[i].id)
                 $scope.selectedEpic = $scope.epics[i]
                 break 
             }
         }
     });
 
-    console.log($scope.card)
-    //For Epic creation, watch that if id o changes
-    $scope.$watch('epics[0]', function(epic){
-        
-        if($scope.card.epicId == 0){
-            $scope.selectedEpic = $scope.epics[0]
-        }
-    });
 }]);
 app.controller('setStepsPanelController', ['$scope', 'postRequestService', function($scope, postRequestService){
     

@@ -42,11 +42,6 @@ app.controller('createCardController', function($scope, $routeParams, $cookies, 
             $scope.epics[0].name = name;
         }
     });
-    //$scope.$watch($scope.newCard.epicForegroundColor, function(){
-    //    if(newCard.cardType == "Epic"){
-    //        $scope.epic.backgroundColor = $scope.newCard.epicForegroundColor;
-    //    }
-    //});
 
     //Watchs details direcive epic. This allows us to keep track
     //of which epic is assigned to card (if the card itself is not an Epic)
@@ -65,7 +60,6 @@ app.controller('createCardController', function($scope, $routeParams, $cookies, 
             $scope.users = unassigned.concat(request.data.response.users);
             $scope.newCard.cardPoc = 0;
 
-            
             $scope.epics = $scope.epics.concat(request.data.response.epics)
     });
     

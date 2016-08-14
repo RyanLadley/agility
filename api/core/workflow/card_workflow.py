@@ -23,6 +23,10 @@ import json
 @workflow.route('/create/card', methods = ['POST'])
 @authorize()
 def create_card():
+
+    '''Creates Card (Epic and Standard) from the card creation menu'''
+    #TODO Make seperate functions for diffrent card types
+
     card_form = json.loads(request.form['payload'])
     card_form = sanitize.form_keys(card_form)
 
@@ -30,6 +34,7 @@ def create_card():
     
     if card.type == CardType(0).name: #Standard
         
+        #add the provided "steps" to the card to be netered into the database
         steps_form = card_form.get('steps')
         steps = create_objects_from_form_array(Step, steps_form)
         card.add_steps(steps)
@@ -37,7 +42,7 @@ def create_card():
         return_value = card_insert.new_card(card)
 
     elif card.type == CardType(1).name: #Epic
-        
+        #No special action needs to be taken, enter into database
         return_value = card_insert.new_epic(card)
 
     else:
@@ -50,6 +55,9 @@ def create_card():
 @workflow.route('/get/cards/user/project/<project_id>', methods = ['POST'])
 @authorize()
 def get_card_with_user_task(project_id, api_response = True):
+
+    '''Using the user id on the authentication token, send back all cards that
+    have steps or are in anyway assigned to the user'''
 
     token_form = json.loads(request.form['token'])
     token_form = sanitize.form_keys(token_form)
@@ -70,6 +78,9 @@ def get_card_with_user_task(project_id, api_response = True):
 @workflow.route("/get/card/<card_index>/project/<project_id>", methods = ['POST'])
 @authorize()
 def get_card(card_index, project_id):
+
+    '''Using the cards index, send back all information pertaining to the card
+    Used primarily for the card details page'''
 
     card_refrence = Card()
     card_refrence.index = card_index
@@ -100,6 +111,10 @@ def get_card_name(card_id, api_response = True):
 @authorize()
 def get_card_details(card_id, api_response = True):
 
+    '''this returns the section containing 
+    the epic, poc, creation date, and updated date'''
+    #TODO, consider better naming
+
     card = card_select.card_details(card_id)
 
     return response.success(card.serialize())
@@ -109,6 +124,8 @@ def get_card_details(card_id, api_response = True):
 @authorize()
 def get_card_description(card_id, api_response = True):
 
+    '''Returns the dexcription of the card of which the id is associated'''
+
     card = card_select.card_description(card_id)
 
     return response.success(card.serialize())
@@ -117,6 +134,8 @@ def get_card_description(card_id, api_response = True):
 @workflow.route("/cards/get/backlog/project/<project_id>", methods = ['POST'])
 @authorize()
 def get_backlog(project_id):
+
+    '''Returns all cards that are open, but not assigned to a sprint'''
 
     backlog = card_select.backlog(project_id)
 
@@ -129,6 +148,8 @@ def get_backlog(project_id):
 @authorize()
 def get_archive(project_id):
 
+    '''Returns all closed Cards'''
+
     archive = card_select.archive(project_id)
 
     serialized_archive = serialize_array(archive)
@@ -139,6 +160,9 @@ def get_archive(project_id):
 @workflow.route("/card/<card_id>/update/name", methods = ['POST'])
 @authorize()
 def update_card_name(card_id):
+
+    '''Updates the provided cards Name
+    then returns this value from the database'''
 
     card_form = json.loads(request.form['payload'])
     card_form = sanitize.form_keys(card_form)
@@ -153,6 +177,9 @@ def update_card_name(card_id):
 @workflow.route("/card/<card_id>/update/description", methods = ['POST'])
 @authorize()
 def update_card_description(card_id):
+
+    '''Updates the provided card's description,
+    then returns the value from the database'''
 
     card_form = json.loads(request.form['payload'])
     card_form = sanitize.form_keys(card_form)
@@ -184,8 +211,10 @@ def update_card_details(card_id):
 @authorize()
 def update_card_steps(card_id):
 
-    steps_form = json.loads(request.form['payload'])
+    '''Updates the steps of the provided card,
+    then returns the value from the database'''
 
+    steps_form = json.loads(request.form['payload'])
     steps = create_objects_from_form_array(Step, steps_form) 
 
     updated_steps = []
@@ -207,6 +236,9 @@ def update_card_steps(card_id):
 
 def serialize_array(array):
 
+    '''Serializes all objects within an array, and returns the value'''
+    #TODO Consider moving this to a diffrent file
+
     serialized_array = []
     for item in array:
         serialized_array.append(item.serialize())
@@ -215,6 +247,8 @@ def serialize_array(array):
 
 
 def create_objects_from_form_array(Class, form):
+
+    '''Takes a form and converts it into objects of the provided class'''
 
     array = []
     try:
